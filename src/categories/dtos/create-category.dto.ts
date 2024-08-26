@@ -9,5 +9,5 @@ export class CreateCategoryDto {
 
   @IsEnum(StatusType)
   @IsNotEmpty()
-  status: boolean;
+  status: string;
 }

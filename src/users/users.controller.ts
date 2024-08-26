@@ -1,8 +1,10 @@
 import { Body, Controller, DefaultValuePipe, Get, Headers, Ip, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { GetUsersParamDto } from './dtos/get-users-param.dto';
 import { PatchUserDto } from './dtos/patch-user.dto';
 import { UserService } from './providers/users.service';
+import { GetByParamDto } from 'src/common/get-by-param';
+import { GetUserDto } from './dtos/get-user.dto';
+import { RequireParamDto } from 'src/common/require-param';
 
 @Controller('users')
 export class UsersController {
@@ -11,11 +13,12 @@ export class UsersController {
 
   @Get('/:id')
   public getUsers(
-    @Param() getUserParamDto: GetUsersParamDto,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number | undefined,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number | undefined,
+    @Param() getUserParamDto: GetByParamDto,
+    @Query() getUserDto: GetUserDto,
   ) {
-    return this.userService.findAll(getUserParamDto, limit, page);
+    const { id } = getUserParamDto;
+    const { limit, page } = getUserDto;
+    return id ? this.userService.findUserById(id) : this.userService.findAll(limit, page);
   }
 
   @Post()
@@ -27,11 +30,12 @@ export class UsersController {
     return this.userService.createUser(createUserDto);
   }
 
-  @Patch()
+  @Patch('/:id')
   public patchUser(
+    @Param() patchUserParamDto: RequireParamDto,
     @Body() patchUserDto: PatchUserDto,
   ) {
-    console.log(patchUserDto instanceof PatchUserDto);
-    return 'User updated';
+    const { id } = patchUserParamDto;
+    return this.userService.updateUser(id, patchUserDto);
   }
 }

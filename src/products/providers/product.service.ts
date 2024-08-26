@@ -9,7 +9,7 @@ export class ProductService {
     private readonly userService: UserService
   ) { }
 
-  getProducts() {
+  getProducts(limit: number, page: number) {
     return [
       {
         id: 1,
@@ -24,7 +24,7 @@ export class ProductService {
     ];
   }
 
-  getProductById(id: number) {
+  getProductById(id: string) {
     return {
       id,
       name: 'Product 1',
@@ -38,7 +38,7 @@ export class ProductService {
     };
   }
 
-  updateProduct(id: number, payload: PatchProductDto) {
+  updateProduct(id: string, payload: PatchProductDto) {
     return {
       id,
       ...payload
