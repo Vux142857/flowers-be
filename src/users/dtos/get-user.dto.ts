@@ -5,6 +5,6 @@ class GetUserBaseDto {
 }
 
 export class GetUserDto extends IntersectionType(
-  GetUserBaseDto,
-  PaginationQueryDto
+  PaginationQueryDto,
+  GetUserBaseDto
 ) { }

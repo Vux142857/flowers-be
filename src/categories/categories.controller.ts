@@ -5,13 +5,19 @@ import { CreateCategoryDto } from './dtos/create-category.dto';
 import { PatchCategoryDto } from './dtos/patch-category.dto';
 import { GetByParamDto } from 'src/common/get-by-param';
 import { RequireParamDto } from 'src/common/require-param';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('categories')
+@ApiTags('Categories')
 export class CategoriesController {
 
   constructor(private readonly categoryService: CategoriesService) { }
 
-  @Get(':/id')
+  @Get('/:id')
+  @ApiOperation({ summary: 'Get all categories or get only one category by id' })
+  @ApiResponse({ status: 200, description: 'The category has been successfully found.' })
+  @ApiQuery({ name: 'page', type: 'number', required: false })
+  @ApiQuery({ name: 'limit', type: 'number', required: false })
   getCategories(
     @Param() getCategoryParamDto: GetByParamDto,
     @Query() getCategoryDto: GetCategoryDto,
