@@ -14,19 +14,26 @@ import { UserService } from './providers/users.service';
 import { GetByParamDto } from 'src/common/get-by-param';
 import { GetUserDto } from './dtos/get-user.dto';
 import { RequireParamDto } from 'src/common/require-param';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/:id')
+  @Get('/:id?')
   @ApiOperation({ summary: 'Get all users or get only one user by id' })
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully found.',
   })
+  @ApiParam({ name: 'id', type: 'string', required: false })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
   public getUsers(
@@ -34,7 +41,9 @@ export class UsersController {
     @Query() getUserDto: GetUserDto,
   ) {
     const { id } = getUserParamDto;
+    console.log(getUserParamDto);
     const { limit, page } = getUserDto;
+    console.log(getUserDto);
     return id
       ? this.userService.findUserById(id)
       : this.userService.findAll(limit, page);

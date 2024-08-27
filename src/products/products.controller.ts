@@ -21,7 +21,7 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class ProductsController {
   constructor(private readonly productService: ProductService) {}
 
-  @Get('/:id')
+  @Get('/:id?')
   @ApiOperation({ summary: 'Get all products or get only one product by id' })
   @ApiResponse({
     status: 200,

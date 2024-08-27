@@ -21,7 +21,7 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class CategoriesController {
   constructor(private readonly categoryService: CategoriesService) {}
 
-  @Get('/:id')
+  @Get('/:id?')
   @ApiOperation({
     summary: 'Get all categories or get only one category by id',
   })
