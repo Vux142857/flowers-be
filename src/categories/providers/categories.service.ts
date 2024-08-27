@@ -1,26 +1,39 @@
-import { Injectable } from "@nestjs/common";
-import { CreateCategoryDto } from "../dtos/create-category.dto";
-import { PatchCategoryDto } from "../dtos/patch-category.dto";
+import { Injectable } from '@nestjs/common';
+import { CreateCategoryDto } from '../dtos/create-category.dto';
+import { PatchCategoryDto } from '../dtos/patch-category.dto';
+import { Category } from '../category.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CategoriesService {
-  getCategories(limit: number, page: number) {
-    return 'Get all categories';
+  constructor(
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
+  ) {}
+
+  async getCategories(limit: number, page: number) {
+    return await this.categoryRepository.find({
+      take: limit,
+      skip: page * limit,
+    });
   }
 
-  getCategory(id: string) {
-    return `Get category with id ${id}`;
+  async getCategory(id: string) {
+    return await this.categoryRepository.findOne({
+      where: { id },
+    });
   }
 
-  createCategory(payload: CreateCategoryDto) {
-    return `Create category with payload ${payload}`;
+  async createCategory(payload: CreateCategoryDto) {
+    return await this.categoryRepository.save(payload);
   }
 
-  updateCategory(id: string, payload: PatchCategoryDto) {
-    return `Update category with id ${id} with payload ${payload}`;
+  async updateCategory(id: string, payload: PatchCategoryDto) {
+    return await this.categoryRepository.update(id, payload);
   }
 
-  deleteCategory(id: number) {
-    return `Delete category with id ${id}`;
+  async deleteCategory(id: string) {
+    return await this.categoryRepository.delete(id);
   }
 }

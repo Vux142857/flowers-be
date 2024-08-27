@@ -1,4 +1,10 @@
-import { IsString, IsNumber, IsArray, IsOptional, IsUUID, MinLength, MaxLength, IsEnum, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  MinLength,
+  MaxLength,
+  IsEnum,
+  IsNotEmpty,
+} from 'class-validator';
 import { StatusType } from 'src/common/statusType.enum';
 
 export class CreateCategoryDto {
@@ -9,5 +15,5 @@ export class CreateCategoryDto {
 
   @IsEnum(StatusType)
   @IsNotEmpty()
-  status: string;
+  status: StatusType;
 }

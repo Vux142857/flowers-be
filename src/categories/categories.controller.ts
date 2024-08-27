@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CategoriesService } from './providers/categories.service';
 import { GetCategoryDto } from './dtos/get-category.dto';
 import { CreateCategoryDto } from './dtos/create-category.dto';
@@ -10,12 +19,16 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('categories')
 @ApiTags('Categories')
 export class CategoriesController {
-
-  constructor(private readonly categoryService: CategoriesService) { }
+  constructor(private readonly categoryService: CategoriesService) {}
 
   @Get('/:id')
-  @ApiOperation({ summary: 'Get all categories or get only one category by id' })
-  @ApiResponse({ status: 200, description: 'The category has been successfully found.' })
+  @ApiOperation({
+    summary: 'Get all categories or get only one category by id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The category has been successfully found.',
+  })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
   getCategories(
@@ -24,7 +37,9 @@ export class CategoriesController {
   ) {
     const { id } = getCategoryParamDto;
     const { limit, page } = getCategoryDto;
-    return id ? this.categoryService.getCategory(id) : this.categoryService.getCategories(limit, page);
+    return id
+      ? this.categoryService.getCategory(id)
+      : this.categoryService.getCategories(limit, page);
   }
 
   @Post()
@@ -33,8 +48,17 @@ export class CategoriesController {
   }
 
   @Patch('/:id')
-  updateCategory(@Param() patchCategory: RequireParamDto, @Body() patchCategoryDto: PatchCategoryDto) {
+  updateCategory(
+    @Param() patchCategory: RequireParamDto,
+    @Body() patchCategoryDto: PatchCategoryDto,
+  ) {
     const { id } = patchCategory;
     return this.categoryService.updateCategory(id, patchCategoryDto);
+  }
+
+  @Delete('/:id')
+  deleteCategory(@Param() deleteCategory: RequireParamDto) {
+    const { id } = deleteCategory;
+    return this.categoryService.deleteCategory(id);
   }
 }

@@ -1,4 +1,15 @@
-import { IsString, IsNumber, IsArray, IsOptional, IsUUID, MinLength, MaxLength, IsEnum, IsNotEmpty, Matches } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsArray,
+  IsOptional,
+  IsUUID,
+  MinLength,
+  MaxLength,
+  IsEnum,
+  IsNotEmpty,
+  Matches,
+} from 'class-validator';
 import { StatusType } from 'src/common/statusType.enum';
 
 export class CreateProductDto {
@@ -9,7 +20,7 @@ export class CreateProductDto {
 
   @IsEnum(StatusType)
   @IsNotEmpty()
-  status: boolean;
+  status: StatusType;
 
   @IsUUID()
   categoryId: string;
@@ -32,7 +43,8 @@ export class CreateProductDto {
 
   @IsString()
   @Matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
-    message: 'A slug should be all small letters and uses only "-" as a separator, and without space'
+    message:
+      'A slug should be all small letters and uses only "-" as a separator, and without space',
   })
   slug: string;
 

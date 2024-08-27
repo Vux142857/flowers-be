@@ -1,4 +1,4 @@
-POST http://localhost:3000/users
+PATCH http://localhost:3000/categories
 Content-Type: application/json
 
 {
@@ -6,6 +6,6 @@ Content-Type: application/json
   "lastName": "Doe",
   "username": "mark15",
   "email": "mark15@doe.com",
-  "status": "active",
+  "isActive": true,
   "password": "Password123@"
 }

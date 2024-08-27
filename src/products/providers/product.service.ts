@@ -1,47 +1,37 @@
-import { Injectable } from "@nestjs/common";
-import { CreateProductDto } from "../dtos/create-product.dto";
-import { PatchProductDto } from "../dtos/patch-product.dto";
-import { UserService } from "src/users/providers/users.service";
+import { Injectable } from '@nestjs/common';
+import { CreateProductDto } from '../dtos/create-product.dto';
+import { PatchProductDto } from '../dtos/patch-product.dto';
+import { UserService } from 'src/users/providers/users.service';
+import { Product } from '../product.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProductService {
   constructor(
-    private readonly userService: UserService
-  ) { }
+    private readonly userService: UserService,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) {}
 
-  getProducts(limit: number, page: number) {
-    return [
-      {
-        id: 1,
-        name: 'Product 1',
-        price: 100
-      },
-      {
-        id: 2,
-        name: 'Product 2',
-        price: 200
-      }
-    ];
+  async getProducts(limit: number, page: number) {
+    return await this.productRepository.find({
+      take: limit,
+      skip: page * limit,
+    });
   }
 
-  getProductById(id: string) {
-    return {
-      id,
-      name: 'Product 1',
-      price: 100
-    };
+  async getProductById(id: string) {
+    return await this.productRepository.findOne({
+      where: { id },
+    });
   }
 
-  createProduct(payload: CreateProductDto) {
-    return {
-      ...payload
-    };
+  async createProduct(payload: CreateProductDto) {
+    return await this.productRepository.save(payload);
   }
 
-  updateProduct(id: string, payload: PatchProductDto) {
-    return {
-      id,
-      ...payload
-    };
+  async updateProduct(id: string, payload: PatchProductDto) {
+    return await this.productRepository.update(id, payload);
   }
 }
