@@ -34,4 +34,8 @@ export class ProductService {
   async updateProduct(id: string, payload: PatchProductDto) {
     return await this.productRepository.update(id, payload);
   }
+
+  async deleteProduct(id: string) {
+    return await this.productRepository.delete(id);
+  }
 }

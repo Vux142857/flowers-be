@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -51,5 +52,11 @@ export class ProductsController {
   ) {
     const { id } = patchProductParamDto;
     return this.productService.updateProduct(id, patchProductDto);
+  }
+
+  @Delete('/:id')
+  deleteProduct(@Param() deleteProductParamDto: RequireParamDto) {
+    const { id } = deleteProductParamDto;
+    return this.productService.deleteProduct(id);
   }
 }
