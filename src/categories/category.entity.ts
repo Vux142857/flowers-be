@@ -1,8 +1,10 @@
 import { StatusType } from 'src/common/statusType.enum';
+import { Product } from 'src/products/product.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,6 +27,9 @@ export class Category {
     nullable: false,
   })
   status: string;
+
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

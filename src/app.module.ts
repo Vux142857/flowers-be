@@ -6,9 +6,10 @@ import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/user.entity';
-import { Product } from './products/product.entity';
-import { Category } from './categories/category.entity';
+import { PaymentsModule } from './payments/payments.module';
+import { SuggestionsModule } from './suggestions/suggestions.module';
+import { OrdersModule } from './orders/orders.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { Category } from './categories/category.entity';
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [User, Product, Category],
+        // entities: [User, Product, Category, Tag],
+        autoLoadEntities: true,
         host: 'localhost',
         port: 5432,
         username: 'postgres',
@@ -30,6 +32,10 @@ import { Category } from './categories/category.entity';
         synchronize: true, // false in production
       }),
     }),
+    PaymentsModule,
+    SuggestionsModule,
+    OrdersModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

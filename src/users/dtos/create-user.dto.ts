@@ -54,4 +54,7 @@ export class CreateUserDto {
   @IsEnum(StatusType)
   @IsNotEmpty()
   status: StatusType;
+
+  @IsOptional()
+  IsAdmin: boolean;
 }

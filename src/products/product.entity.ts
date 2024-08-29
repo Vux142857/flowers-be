@@ -1,3 +1,4 @@
+import { Category } from 'src/categories/category.entity';
 import { StatusType } from 'src/common/statusType.enum';
 import {
   Entity,
@@ -5,6 +6,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -23,8 +25,14 @@ export class Product {
   })
   status: string;
 
+  // @Column({ type: 'varchar', length: 100, nullable: false })
+  // slug: string;
+
   @Column({ type: 'uuid', nullable: false })
   categoryId: string;
+
+  @ManyToOne(() => Category, (category) => category.products)
+  category: Category;
 
   @Column({ type: 'decimal', nullable: false })
   price: number;

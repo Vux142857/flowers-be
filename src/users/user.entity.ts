@@ -1,5 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { StatusType } from 'src/common/statusType.enum';
+import Order from 'src/orders/order.entity';
+import { Payment } from 'src/payments/payment.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,6 +9,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -41,16 +44,9 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   forgotPasswordToken: string;
 
-  // @Exclude()
-  // @Column({ type: 'varchar', nullable: true })
-  // verifyPasswordToken: string;
-
   @Exclude()
   @Column({ type: 'varchar', nullable: true })
   refreshToken: string;
-
-  // @Column({ type: 'uuid', nullable: true })
-  // roleId: string;
 
   @Column({
     type: 'enum',
@@ -59,6 +55,15 @@ export class User {
     default: StatusType.ACTIVE,
   })
   status: string;
+
+  @Column({ type: 'boolean', nullable: false, default: false })
+  isAdmin: boolean;
+
+  @OneToMany(() => Order, (order) => order.customer)
+  orders: Order[];
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
