@@ -10,6 +10,8 @@ import { PaymentsModule } from './payments/payments.module';
 import { SuggestionsModule } from './suggestions/suggestions.module';
 import { OrdersModule } from './orders/orders.module';
 import { TagsModule } from './tags/tags.module';
+import { OrderItemsModule } from './order-items/order-items.module';
+import { CouponsModule } from './coupons/coupons.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { TagsModule } from './tags/tags.module';
     SuggestionsModule,
     OrdersModule,
     TagsModule,
+    OrderItemsModule,
+    CouponsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

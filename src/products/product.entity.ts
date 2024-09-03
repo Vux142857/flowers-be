@@ -1,5 +1,6 @@
 import { Category } from 'src/categories/category.entity';
 import { StatusType } from 'src/common/statusType.enum';
+import { OrderItem } from 'src/order-items/order-items.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,6 +8,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -51,6 +53,9 @@ export class Product {
 
   @Column({ type: 'uuid', nullable: true })
   suggesionId: string;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.productId)
+  orderItems: OrderItem[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
