@@ -1,9 +1,9 @@
 import { IntersectionType } from '@nestjs/mapped-types';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 
-class GetCategoryBaseDto {}
+class GetSuggestionBaseDto {}
 
-export class GetCategoryDto extends IntersectionType(
-  GetCategoryBaseDto,
+export class GetSuggestionDto extends IntersectionType(
+  GetSuggestionBaseDto,
   PaginationQueryDto,
 ) {}

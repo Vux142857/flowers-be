@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNumber,
@@ -9,8 +10,11 @@ import {
   IsEnum,
   IsNotEmpty,
   Matches,
+  IsUrl,
+  ValidateNested,
 } from 'class-validator';
 import { StatusType } from 'src/common/statusType.enum';
+import { CreateSuggestionDto } from 'src/suggestions/dtos/create-suggestions.dto';
 
 export class CreateProductDto {
   @IsString()
@@ -24,6 +28,10 @@ export class CreateProductDto {
 
   @IsUUID()
   categoryId: string;
+
+  @IsString()
+  @IsUrl()
+  imageUrl: string;
 
   @IsNumber()
   price: number;
@@ -50,9 +58,10 @@ export class CreateProductDto {
 
   @IsUUID()
   @IsOptional()
-  couponId?: string;
+  couponCode?: string;
 
-  @IsUUID()
   @IsOptional()
-  suggesionId?: string;
+  @ValidateNested({ each: true })
+  @Type(() => CreateSuggestionDto)
+  suggestion: CreateSuggestionDto | null;
 }

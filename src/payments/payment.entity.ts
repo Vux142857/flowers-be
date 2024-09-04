@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PaymentType } from './enum/PaymentType';
 import { User } from 'src/users/user.entity';
+import Order from 'src/orders/order.entity';
 
 @Entity()
 export class Payment {
@@ -25,6 +28,10 @@ export class Payment {
     default: PaymentType.COD,
   })
   paymentType: string;
+
+  @OneToOne(() => Order, (order) => order.payment, { nullable: true })
+  @JoinColumn()
+  order: Order;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

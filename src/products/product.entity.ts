@@ -1,6 +1,8 @@
 import { Category } from 'src/categories/category.entity';
 import { StatusType } from 'src/common/statusType.enum';
+import { Coupon } from 'src/coupons/coupon.entity';
 import { OrderItem } from 'src/order-items/order-items.entity';
+import { Suggestion } from 'src/suggestions/suggestion.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,6 +11,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 
 @Entity()
@@ -27,14 +30,8 @@ export class Product {
   })
   status: string;
 
-  // @Column({ type: 'varchar', length: 100, nullable: false })
-  // slug: string;
-
-  @Column({ type: 'uuid', nullable: false })
-  categoryId: string;
-
-  @ManyToOne(() => Category, (category) => category.products)
-  category: Category;
+  @Column({ type: 'varchar', length: 100, nullable: false })
+  slug: string;
 
   @Column({ type: 'decimal', nullable: false })
   price: number;
@@ -43,19 +40,35 @@ export class Product {
   remaining: number;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description?: string;
+
+  @Column({ type: 'text', nullable: false })
+  imageUrl: string;
 
   @Column({ type: 'simple-array', nullable: true })
-  tags: string[];
+  tags?: string[];
 
-  @Column({ type: 'uuid', nullable: true })
-  couponId: string;
+  @ManyToOne(() => Category, (category) => category.products, {
+    nullable: false,
+  })
+  category: Category;
 
-  @Column({ type: 'uuid', nullable: true })
-  suggesionId: string;
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.product, {
+    nullable: true,
+  })
+  orderItems?: OrderItem[];
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.productId)
-  orderItems: OrderItem[];
+  @ManyToOne(() => Coupon, (coupon) => coupon.products, {
+    nullable: true,
+  })
+  coupon?: Coupon;
+
+  @OneToOne(() => Suggestion, {
+    cascade: ['insert', 'update', 'remove'],
+    nullable: true,
+    eager: true,
+  })
+  suggestion?: Suggestion;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

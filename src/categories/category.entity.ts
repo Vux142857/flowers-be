@@ -18,7 +18,7 @@ export class Category {
   name: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description?: string;
 
   @Column({
     type: 'enum',
@@ -28,8 +28,8 @@ export class Category {
   })
   status: string;
 
-  @OneToMany(() => Product, (product) => product.category)
-  products: Product[];
+  @OneToMany(() => Product, (product) => product.category, { nullable: true })
+  products?: Product[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

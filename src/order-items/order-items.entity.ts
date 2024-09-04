@@ -14,8 +14,8 @@ export class OrderItem {
   subTotal: number;
 
   @ManyToOne(() => Order, (order) => order.orderItems)
-  orderId: string;
+  order: Order;
 
   @ManyToOne(() => Product, (product) => product.orderItems)
-  productId: string;
+  product: Product;
 }

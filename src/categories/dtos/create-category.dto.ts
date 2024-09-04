@@ -13,6 +13,10 @@ export class CreateCategoryDto {
   @MaxLength(100)
   name: string;
 
+  @IsString()
+  @MaxLength(500)
+  description: string;
+
   @IsEnum(StatusType)
   @IsNotEmpty()
   status: StatusType;

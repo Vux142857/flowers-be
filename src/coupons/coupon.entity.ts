@@ -3,9 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CouponType } from './enum/CouponType.enum';
+import { Product } from 'src/products/product.entity';
 
 @Entity()
 export class Coupon {
@@ -25,6 +28,20 @@ export class Coupon {
     nullable: false,
   })
   status: string;
+
+  @Column({ type: 'int', nullable: false })
+  remaining: number;
+
+  @Column({
+    type: 'enum',
+    enum: CouponType,
+    default: CouponType.PERCENTAGE,
+    nullable: false,
+  })
+  type: string;
+
+  @OneToMany(() => Product, (product) => product.coupon)
+  products: Product[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

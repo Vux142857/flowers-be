@@ -2,14 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/users/user.entity';
 import { StatusOrder } from './enum/StatusOrder.enum';
 import { OrderItem } from 'src/order-items/order-items.entity';
+import { Payment } from 'src/payments/payment.entity';
 
 @Entity()
 export default class Order {
@@ -25,8 +28,12 @@ export default class Order {
   @Column({ type: 'varchar', length: 100, nullable: false })
   statusOrder: StatusOrder;
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.orderId)
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
+
+  @OneToOne(() => Payment, (payment) => payment.order)
+  @JoinColumn()
+  payment: Payment;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
