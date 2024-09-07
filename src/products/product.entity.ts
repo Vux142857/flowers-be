@@ -3,6 +3,7 @@ import { StatusType } from 'src/common/statusType.enum';
 import { Coupon } from 'src/coupons/coupon.entity';
 import { OrderItem } from 'src/order-items/order-items.entity';
 import { Suggestion } from 'src/suggestions/suggestion.entity';
+import { Tag } from 'src/tags/tag.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -12,6 +13,9 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -45,11 +49,13 @@ export class Product {
   @Column({ type: 'text', nullable: false })
   imageUrl: string;
 
-  @Column({ type: 'simple-array', nullable: true })
-  tags?: string[];
+  @ManyToMany(() => Tag, { eager: true, nullable: true })
+  @JoinTable()
+  tags?: Tag[];
 
   @ManyToOne(() => Category, (category) => category.products, {
     nullable: false,
+    eager: true,
   })
   category: Category;
 
@@ -60,6 +66,7 @@ export class Product {
 
   @ManyToOne(() => Coupon, (coupon) => coupon.products, {
     nullable: true,
+    eager: true,
   })
   coupon?: Coupon;
 
@@ -68,6 +75,7 @@ export class Product {
     nullable: true,
     eager: true,
   })
+  @JoinColumn()
   suggestion?: Suggestion;
 
   @CreateDateColumn({ type: 'timestamp' })

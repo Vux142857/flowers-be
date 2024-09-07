@@ -23,7 +23,7 @@ export class UserService {
   }
 
   async findUserById(id: string) {
-    return await this.userRepository.findOne({ where: { id } });
+    return await this.userRepository.findOneBy({ id });
   }
 
   async createUser(createUserDto: CreateUserDto) {

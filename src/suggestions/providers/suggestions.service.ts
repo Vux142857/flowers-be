@@ -6,7 +6,7 @@ import { PatchSuggestionDto } from '../dtos/patch-suggestions.dto';
 import { CreateSuggestionDto } from '../dtos/create-suggestions.dto';
 
 @Injectable()
-export class SuggestionsService {
+export class SuggestionService {
   constructor(
     @InjectRepository(Suggestion)
     private readonly suggestionRepository: Repository<Suggestion>,

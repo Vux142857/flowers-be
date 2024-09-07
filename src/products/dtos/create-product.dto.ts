@@ -43,10 +43,9 @@ export class CreateProductDto {
   @IsOptional()
   description?: string;
 
+  @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  @MinLength(3, { each: true })
-  @MaxLength(50, { each: true })
+  @IsUUID('4', { each: true })
   tags: string[];
 
   @IsString()

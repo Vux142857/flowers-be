@@ -8,17 +8,17 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { SuggestionsService } from './providers/suggestions.service';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { RequireParamDto } from 'src/common/require-param';
 import { PatchSuggestionDto } from './dtos/patch-suggestions.dto';
 import { GetByParamDto } from 'src/common/get-by-param';
 import { CreateSuggestionDto } from './dtos/create-suggestions.dto';
 import { GetSuggestionDto } from './dtos/get-suggestion.dto';
+import { SuggestionService } from './providers/suggestions.service';
 
 @Controller('suggestions')
 export class SuggestionsController {
-  constructor(private readonly suggestionsService: SuggestionsService) {}
+  constructor(private readonly suggestionService: SuggestionService) {}
 
   @Get('/:id?')
   @ApiOperation({ summary: 'Get all products or get only one product by id' })
@@ -35,13 +35,13 @@ export class SuggestionsController {
     const { id } = getProductParamDto;
     const { limit, page } = getProductDto;
     return id
-      ? this.suggestionsService.getSuggestion(id)
-      : this.suggestionsService.getSuggestions(limit, page);
+      ? this.suggestionService.getSuggestion(id)
+      : this.suggestionService.getSuggestions(limit, page);
   }
 
   @Post()
   createSuggestion(@Body() createSuggestionDto: CreateSuggestionDto) {
-    return this.suggestionsService.createSuggestion(createSuggestionDto);
+    return this.suggestionService.createSuggestion(createSuggestionDto);
   }
 
   @Patch('/:id')
@@ -50,12 +50,12 @@ export class SuggestionsController {
     @Body() patchSuggestionDto: PatchSuggestionDto,
   ) {
     const { id } = patchSuggestionParamDto;
-    return this.suggestionsService.updateSuggestion(id, patchSuggestionDto);
+    return this.suggestionService.updateSuggestion(id, patchSuggestionDto);
   }
 
   @Delete('/:id')
   deleteSuggestion(@Param() deleteProductParamDto: RequireParamDto) {
     const { id } = deleteProductParamDto;
-    return this.suggestionsService.deleteSuggestion(id);
+    return this.suggestionService.deleteSuggestion(id);
   }
 }

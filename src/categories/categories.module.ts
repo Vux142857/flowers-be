@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { CategoriesController } from './categories.controller';
-import { CategoriesService } from './providers/categories.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './category.entity';
+import { CategoryService } from './providers/categories.service';
 
 @Module({
   controllers: [CategoriesController],
-  providers: [CategoriesService],
+  providers: [CategoryService],
   imports: [TypeOrmModule.forFeature([Category])],
+  exports: [CategoryService],
 })
 export class CategoriesModule {}

@@ -4,6 +4,7 @@ import {
   MaxLength,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
 } from 'class-validator';
 import { StatusType } from 'src/common/statusType.enum';
 
@@ -14,8 +15,9 @@ export class CreateCategoryDto {
   name: string;
 
   @IsString()
+  @IsOptional()
   @MaxLength(500)
-  description: string;
+  description?: string;
 
   @IsEnum(StatusType)
   @IsNotEmpty()

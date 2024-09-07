@@ -8,18 +8,18 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { CategoriesService } from './providers/categories.service';
 import { GetCategoryDto } from './dtos/get-category.dto';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { PatchCategoryDto } from './dtos/patch-category.dto';
 import { GetByParamDto } from 'src/common/get-by-param';
 import { RequireParamDto } from 'src/common/require-param';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CategoryService } from './providers/categories.service';
 
 @Controller('categories')
 @ApiTags('Categories')
 export class CategoriesController {
-  constructor(private readonly categoryService: CategoriesService) {}
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Get('/:id?')
   @ApiOperation({

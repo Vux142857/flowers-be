@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsOptional, IsString, Matches } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Matches,
+} from 'class-validator';
 
 export class CreateTagDto {
   @IsString()
@@ -16,5 +22,6 @@ export class CreateTagDto {
   desciption: string;
 
   @IsOptional()
+  @IsUrl()
   featureImageUrl: string;
 }
