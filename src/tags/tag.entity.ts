@@ -1,7 +1,9 @@
+import { Product } from 'src/products/product.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -22,6 +24,11 @@ export class Tag {
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   featureImageUrl: string;
+
+  @ManyToMany(() => Product, (product) => product.tags, {
+    onDelete: 'CASCADE',
+  })
+  products: Product[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

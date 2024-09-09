@@ -37,7 +37,7 @@ export class User {
   @Column({ type: 'uuid', nullable: true })
   subscribedId: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, unique: true })
   googleId: string;
 
   @Exclude()
