@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
@@ -39,7 +40,7 @@ export class UserService {
       where: { email: createUserDto.email },
     });
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new BadRequestException('User already exists');
     }
     const newUser = await this.userRepository.create(createUserDto);
     newUser.password = await this.hashingProvider.hash(newUser.password);
@@ -57,15 +58,10 @@ export class UserService {
   }
 
   async updateUser(id: string, patchUserDto: PatchUserDto) {
-    return {
-      id,
-      ...patchUserDto,
-    };
+    return await this.userRepository.update(id, patchUserDto);
   }
 
   public deleteUser(id: string) {
-    return {
-      id,
-    };
+    return this.userRepository.delete(id);
   }
 }

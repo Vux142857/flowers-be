@@ -52,8 +52,8 @@ export class CreateUserDto {
   address?: string;
 
   @IsEnum(StatusType)
-  @IsNotEmpty()
-  status: StatusType;
+  @IsOptional()
+  status?: StatusType = StatusType.ACTIVE;
 
   @IsOptional()
   IsAdmin: boolean;

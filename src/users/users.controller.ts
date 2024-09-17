@@ -1,12 +1,15 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { PatchUserDto } from './dtos/patch-user.dto';
@@ -36,36 +39,43 @@ export class UsersController {
   @ApiParam({ name: 'id', type: 'string', required: false })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
+  @UseInterceptors(ClassSerializerInterceptor)
   public getUsers(
     @Param() getUserParamDto: GetByParamDto,
     @Query() getUserDto: GetUserDto,
   ) {
     const { id } = getUserParamDto;
-    console.log(getUserParamDto);
     const { limit, page } = getUserDto;
-    console.log(getUserDto);
     return id
       ? this.userService.findUserById(id)
       : this.userService.findAll(limit, page);
   }
 
   @Post()
+  @UseInterceptors(ClassSerializerInterceptor)
   public createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
   @Patch('/:id')
+  @UseInterceptors(ClassSerializerInterceptor)
   public patchUser(
     @Param() patchUserParamDto: RequireParamDto,
     @Body() patchUserDto: PatchUserDto,
   ) {
     const { id } = patchUserParamDto;
+    const existingUser = this.userService.findUserById(id);
+    if (!existingUser) {
+      throw new NotFoundException('User not found');
+    }
     return this.userService.updateUser(id, patchUserDto);
   }
 
   @Delete('/:id')
-  public deleteUser(@Param() patchUserParamDto: RequireParamDto) {
-    const { id } = patchUserParamDto;
-    return this.userService.deleteUser(id);
+  public deleteUser(@Param() deleteUserParamDto: RequireParamDto) {
+    this.userService.deleteUser(deleteUserParamDto.id);
+    return {
+      message: 'User deleted successfully',
+    };
   }
 }

@@ -17,10 +17,10 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 96, nullable: false })
+  @Column({ type: 'varchar', length: 96, nullable: true })
   firstName: string;
 
-  @Column({ type: 'varchar', length: 96, nullable: false })
+  @Column({ type: 'varchar', length: 96, nullable: true })
   lastName: string;
 
   @Index()
@@ -34,7 +34,8 @@ export class User {
   @Column({ type: 'varchar', length: 128, nullable: false })
   password: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ type: 'uuid', nullable: true, unique: true })
+  @Index()
   subscribedId: string;
 
   @Column({ type: 'varchar', nullable: true, unique: true })
