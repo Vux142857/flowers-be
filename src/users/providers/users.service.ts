@@ -1,10 +1,16 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { AuthService } from 'src/auth/providers/auth.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
 import { Repository } from 'typeorm';
+import { HashingProvider } from 'src/auth/providers/hashing.provider';
 
 @Injectable()
 export class UserService {
@@ -13,6 +19,8 @@ export class UserService {
     private readonly authService: AuthService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject(forwardRef(() => HashingProvider))
+    private readonly hashingProvider: HashingProvider,
   ) {}
 
   async findAll(limit: number, page: number) {
@@ -33,10 +41,22 @@ export class UserService {
     if (existingUser) {
       throw new Error('User already exists');
     }
-    return await this.userRepository.save(createUserDto);
+    const newUser = await this.userRepository.create(createUserDto);
+    newUser.password = await this.hashingProvider.hash(newUser.password);
+    return await this.userRepository.save(newUser);
   }
 
-  public updateUser(id: string, patchUserDto: PatchUserDto) {
+  async findOneByEmail(email: string) {
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (!existingUser) {
+      throw new NotFoundException('User not found');
+    }
+    return existingUser;
+  }
+
+  async updateUser(id: string, patchUserDto: PatchUserDto) {
     return {
       id,
       ...patchUserDto,

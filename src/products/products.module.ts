@@ -8,6 +8,7 @@ import { CategoriesModule } from 'src/categories/categories.module';
 import { SuggestionsModule } from 'src/suggestions/suggestions.module';
 import { Category } from 'src/categories/category.entity';
 import { TagsModule } from 'src/tags/tags.module';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
 
 @Module({
   controllers: [ProductsController],
@@ -18,6 +19,7 @@ import { TagsModule } from 'src/tags/tags.module';
     CategoriesModule,
     SuggestionsModule,
     TagsModule,
+    PaginationModule,
   ],
   exports: [ProductService],
 })

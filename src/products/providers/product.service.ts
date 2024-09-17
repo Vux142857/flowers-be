@@ -6,37 +6,34 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from 'src/categories/category.entity';
 import { Tag } from 'src/tags/tag.entity';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
-  async getProducts(limit: number, page: number) {
-    const total = await this.productRepository.count();
-
-    const maxPage = Math.ceil(total / limit) - 1;
-
-    const validPage = Math.min(page, maxPage);
-
-    const [products, count] = await this.productRepository.findAndCount({
-      take: limit,
-      skip: validPage * limit,
-      order: { createdAt: 'DESC' },
-    });
-
-    return {
-      data: products,
-      total: count,
-      page: validPage,
-      pageCount: maxPage + 1,
-    };
+  public async getProducts(
+    limit: number,
+    page: number,
+  ): Promise<Paginated<Product>> {
+    return await this.paginationProvider.paginateQuery<Product>(
+      { limit, page },
+      this.productRepository,
+    );
   }
 
   async getProductById(id: string) {
-    return await this.productRepository.findOneBy({ id });
+    const product = await this.productRepository.findOneBy({ id });
+    if (!product) {
+      throw new NotFoundException(`Product with id ${id} not found`);
+    }
+    return product;
   }
 
   async createProduct(

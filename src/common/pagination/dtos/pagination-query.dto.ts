@@ -1,6 +1,7 @@
-import { IsOptional, IsPositive } from 'class-validator';
+import { IsEnum, IsOptional, IsPositive } from 'class-validator';
 
 import { Type } from 'class-transformer';
+import { StatusType } from 'src/common/statusType.enum';
 
 export class PaginationQueryDto {
   @IsOptional()
@@ -12,4 +13,8 @@ export class PaginationQueryDto {
   @IsPositive()
   @Type(() => Number)
   page?: number = 1;
+
+  @IsOptional()
+  @IsEnum(StatusType)
+  status?: StatusType = StatusType.ACTIVE;
 }

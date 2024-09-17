@@ -13,6 +13,7 @@ import { TagsModule } from './tags/tags.module';
 import { OrderItemsModule } from './order-items/order-items.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PaginationModule } from './common/pagination/pagination.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import environmentValidation from './config/environment.validation';
@@ -33,16 +34,27 @@ const ENV = process.env.NODE_ENV || '';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        autoLoadEntities: configService.get('database.autoLoadEntities'),
-        host: configService.get('database.host'),
-        port: configService.get('database.port'),
-        username: configService.get('database.username'),
-        password: configService.get('database.password'),
-        database: configService.get('database.name'),
-        synchronize: configService.get('database.synchronize'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        console.log({
+          type: 'postgres',
+          host: configService.get('database.host'),
+          port: configService.get('database.port'),
+          username: configService.get('database.username'),
+          database: configService.get('database.database'),
+          synchronize: configService.get('database.synchronize'),
+          autoLoadEntities: configService.get('database.autoLoadEntities'),
+        });
+        return {
+          type: 'postgres',
+          host: configService.get('database.host'),
+          port: +configService.get('database.port'),
+          username: configService.get('database.username'),
+          password: configService.get('database.password'),
+          database: configService.get('database.database'),
+          synchronize: configService.get('database.synchronize'),
+          autoLoadEntities: configService.get('database.autoLoadEntities'),
+        };
+      },
     }),
     PaymentsModule,
     SuggestionsModule,
@@ -50,6 +62,7 @@ const ENV = process.env.NODE_ENV || '';
     TagsModule,
     OrderItemsModule,
     CouponsModule,
+    PaginationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
