@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  SetMetadata,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -26,16 +27,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
-import { Roles } from 'src/roles/role.decorator';
-import { Role } from 'src/roles/role.enum';
-import { RolesGuard } from 'src/roles/roles.guard';
+import { RolesGuard } from 'src/auth/guards/authentication/roles.guard';
+import { Roles } from 'src/auth/decorator/authorization/role.decorator';
+import { Role } from 'src/auth/enums/role-type.enum';
 
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/:id?')
   @ApiOperation({ summary: 'Get all users or get only one user by id' })
   @ApiResponse({
     status: 200,
@@ -44,6 +44,7 @@ export class UsersController {
   @ApiParam({ name: 'id', type: 'string', required: false })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
+  @Get('/:id?')
   @UseInterceptors(ClassSerializerInterceptor)
   public getUsers(
     @Param() getUserParamDto: GetByParamDto,
@@ -57,6 +58,7 @@ export class UsersController {
   }
 
   @Post()
+  @SetMetadata('isPublic', true)
   @UseInterceptors(ClassSerializerInterceptor)
   public createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);

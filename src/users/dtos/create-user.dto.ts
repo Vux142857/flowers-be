@@ -1,6 +1,5 @@
 import {
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -8,7 +7,6 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { StatusType } from 'src/common/statusType.enum';
 
 export class CreateUserDto {
   @IsString()
@@ -50,11 +48,4 @@ export class CreateUserDto {
   @MinLength(3)
   @MaxLength(100)
   address?: string;
-
-  @IsEnum(StatusType)
-  @IsOptional()
-  status?: StatusType = StatusType.ACTIVE;
-
-  @IsOptional()
-  IsAdmin: boolean;
 }

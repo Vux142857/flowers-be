@@ -8,10 +8,18 @@ import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from 'src/auth/config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 
 @Module({
   controllers: [UsersController],
-  providers: [UserService],
+  providers: [
+    UserService,
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
+  ],
   imports: [
     forwardRef(() => AuthModule),
     TypeOrmModule.forFeature([User]),

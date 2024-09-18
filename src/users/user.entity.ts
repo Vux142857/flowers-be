@@ -1,8 +1,8 @@
 import { Exclude } from 'class-transformer';
+import { Role } from 'src/auth/enums/role-type.enum';
 import { StatusType } from 'src/common/statusType.enum';
 import Order from 'src/orders/order.entity';
 import { Payment } from 'src/payments/payment.entity';
-import { Role } from 'src/roles/role.enum';
 import {
   Entity,
   PrimaryGeneratedColumn,

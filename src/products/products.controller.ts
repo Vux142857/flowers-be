@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductService } from './providers/product.service';
 import { CreateProductDto } from './dtos/create-product.dto';
@@ -21,6 +22,10 @@ import { TagService } from 'src/tags/providers/tag.service';
 import { Category } from 'src/categories/category.entity';
 import { Product } from './product.entity';
 import { Tag } from 'src/tags/tag.entity';
+import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { RolesGuard } from 'src/auth/guards/authentication/roles.guard';
+import { Roles } from 'src/auth/decorator/authorization/role.decorator';
+import { Role } from 'src/auth/enums/role-type.enum';
 
 @Controller('products')
 @ApiTags('Products')
@@ -50,6 +55,8 @@ export class ProductsController {
       : this.productService.getProducts(limit, page);
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @Post()
   async createProduct(@Body() createProductDto: CreateProductDto) {
     return this.createOrUpdateProduct(createProductDto, (category, tags) =>
@@ -57,6 +64,8 @@ export class ProductsController {
     );
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @Patch('/:id')
   async updateProduct(
     @Param() patchProductParamDto: RequireParamDto,
@@ -68,6 +77,8 @@ export class ProductsController {
     );
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @Delete('/:id')
   deleteProduct(@Param() deleteProductParamDto: RequireParamDto) {
     const { id } = deleteProductParamDto;

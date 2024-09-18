@@ -10,6 +10,7 @@ import { SignInDto } from '../dtos/signIn.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import jwtConfig from '../config/jwt.config';
+import { SignUpDto } from '../dtos/signUp.dto';
 
 @Injectable()
 export class AuthService {
@@ -45,8 +46,20 @@ export class AuthService {
     return { accessToken };
   }
 
-  // public isAuth(token: string) {
-  //   // return this.userService.isAuth(token);
-  //   return true;
-  // }
+  async signUp(signUpDto: SignUpDto) {
+    const newUser = await this.userService.createUser(signUpDto);
+    if (!newUser) {
+      throw new UnauthorizedException('Invalid user');
+    }
+    const accessToken = await this.jwtService.signAsync(
+      { email: newUser.email, sub: newUser.id },
+      {
+        secret: this.jwtConfiguration.secret,
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+        expiresIn: this.jwtConfiguration.accessTokenExpiresIn,
+      },
+    );
+    return { accessToken };
+  }
 }
