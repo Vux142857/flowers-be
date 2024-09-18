@@ -2,6 +2,7 @@ import { Exclude } from 'class-transformer';
 import { StatusType } from 'src/common/statusType.enum';
 import Order from 'src/orders/order.entity';
 import { Payment } from 'src/payments/payment.entity';
+import { Role } from 'src/roles/role.enum';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -49,6 +50,7 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   refreshToken: string;
 
+  @Exclude()
   @Column({
     type: 'enum',
     enum: StatusType,
@@ -57,8 +59,13 @@ export class User {
   })
   status: string;
 
-  @Column({ type: 'boolean', nullable: false, default: false })
-  isAdmin: boolean;
+  @Column({
+    type: 'enum',
+    enum: Role,
+    nullable: false,
+    default: [Role.CUSTOMER],
+  })
+  roles: Role[];
 
   @OneToMany(() => Order, (order) => order.customer)
   orders: Order[];

@@ -12,23 +12,28 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
 import { Repository } from 'typeorm';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
     @Inject(forwardRef(() => HashingProvider))
     private readonly hashingProvider: HashingProvider,
+
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
   async findAll(limit: number, page: number) {
-    return await this.userRepository.find({
-      take: limit,
-      skip: page * limit,
-    });
+    return await this.paginationProvider.paginateQuery<User>(
+      { limit, page },
+      this.userRepository,
+    );
   }
 
   async findUserById(id: string) {

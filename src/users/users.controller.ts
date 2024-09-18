@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -24,6 +25,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { Roles } from 'src/roles/role.decorator';
+import { Role } from 'src/roles/role.enum';
+import { RolesGuard } from 'src/roles/roles.guard';
 
 @Controller('users')
 @ApiTags('Users')
@@ -71,6 +76,8 @@ export class UsersController {
     return this.userService.updateUser(id, patchUserDto);
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @Delete('/:id')
   public deleteUser(@Param() deleteUserParamDto: RequireParamDto) {
     this.userService.deleteUser(deleteUserParamDto.id);
