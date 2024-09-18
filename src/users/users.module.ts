@@ -4,11 +4,12 @@ import { UserService } from './providers/users.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from 'src/auth/config/jwt.config';
-import { ConfigModule } from '@nestjs/config';
-import { PaginationModule } from 'src/common/pagination/pagination.module';
 import { APP_GUARD } from '@nestjs/core';
+import { AuthenticationGuard } from 'src/auth/guards/authentication/authentication.guard';
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 
 @Module({
@@ -17,8 +18,9 @@ import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
     UserService,
     {
       provide: APP_GUARD,
-      useClass: AccessTokenGuard,
+      useClass: AuthenticationGuard,
     },
+    AccessTokenGuard,
   ],
   imports: [
     forwardRef(() => AuthModule),

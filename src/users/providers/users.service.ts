@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
-import { AuthService } from 'src/auth/providers/auth.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
 import { Repository } from 'typeorm';
@@ -17,9 +16,6 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService,
-
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
@@ -41,9 +37,7 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const existingUser = await this.userRepository.findOne({
-      where: { email: createUserDto.email },
-    });
+    const existingUser = await this.findOneByEmail(createUserDto.email);
     if (existingUser) {
       throw new BadRequestException('User already exists');
     }

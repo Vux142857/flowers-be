@@ -6,11 +6,21 @@ import {
 } from 'src/auth/constants/auth.constants';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { AccessTokenGuard } from '../access-token.guard';
+
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
+  private static readonly defaultAuthType = AuthType.NONE;
+
+  private readonly authTypeGuardMap: Record<
+    AuthType,
+    CanActivate | CanActivate[]
+  > = {
+    [AuthType.BEARER]: this.accessTokenGuard,
+    [AuthType.NONE]: { canActivate: () => true },
+  };
+
   constructor(
     private reflector: Reflector,
-
     private readonly accessTokenGuard: AccessTokenGuard,
   ) {}
 
@@ -24,6 +34,7 @@ export class AuthenticationGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const user = request[REQUEST_USER_KEY];
+    console.log(this.authTypeGuardMap);
     return user;
   }
 }

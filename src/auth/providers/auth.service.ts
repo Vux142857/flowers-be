@@ -20,6 +20,7 @@ export class AuthService {
 
     private readonly hashingProvider: HashingProvider,
 
+    @Inject(JwtService)
     private readonly jwtService: JwtService,
 
     @Inject(jwtConfig.KEY)
@@ -35,7 +36,7 @@ export class AuthService {
     }
 
     const accessToken = await this.jwtService.signAsync(
-      { email: user.email, sub: user.id },
+      { email: user.email, sub: user.id, roles: user.roles },
       {
         secret: this.jwtConfiguration.secret,
         audience: this.jwtConfiguration.audience,
@@ -52,7 +53,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid user');
     }
     const accessToken = await this.jwtService.signAsync(
-      { email: newUser.email, sub: newUser.id },
+      { email: newUser.email, sub: newUser.id, roles: newUser.roles },
       {
         secret: this.jwtConfiguration.secret,
         audience: this.jwtConfiguration.audience,

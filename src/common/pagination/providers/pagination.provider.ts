@@ -6,6 +6,7 @@ import { Request } from 'express';
 import { URL } from 'url';
 import { Paginated } from '../interfaces/paginated.interface';
 import { Role } from 'src/auth/enums/role-type.enum';
+
 @Injectable()
 export class PaginationProvider {
   constructor(

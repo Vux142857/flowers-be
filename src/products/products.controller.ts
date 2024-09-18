@@ -23,7 +23,7 @@ import { Category } from 'src/categories/category.entity';
 import { Product } from './product.entity';
 import { Tag } from 'src/tags/tag.entity';
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
-import { RolesGuard } from 'src/auth/guards/authentication/roles.guard';
+import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
 import { Roles } from 'src/auth/decorator/authorization/role.decorator';
 import { Role } from 'src/auth/enums/role-type.enum';
 

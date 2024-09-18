@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { HashingProvider } from './hashing.provider';
 import * as bcrypt from 'bcrypt';
 
+@Injectable()
 export class BcryptProvider implements HashingProvider {
   async hash(value: string | Buffer): Promise<string> {
     const salt = await bcrypt.genSaltSync(10);

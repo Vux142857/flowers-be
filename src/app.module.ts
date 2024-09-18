@@ -21,6 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './auth/config/jwt.config';
 import { AccessTokenGuard } from './auth/guards/access-token.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
 
 const ENV = process.env.NODE_ENV || '';
 @Module({
@@ -47,6 +48,10 @@ const ENV = process.env.NODE_ENV || '';
           database: configService.get('database.database'),
           synchronize: configService.get('database.synchronize'),
           autoLoadEntities: configService.get('database.autoLoadEntities'),
+          JWT_SECRET: configService.get('jwt.JWT_SECRET'),
+          JWT_AUDIENCE: configService.get('jwt.JWT_AUDIENCE'),
+          JWT_ISSUER: configService.get('jwt.JWT_ISSUER'),
+          JWT_EXPIRES_IN: configService.get('jwt.JWT_ACCESS_TOKEN_TTL'),
         });
         return {
           type: 'postgres',
@@ -75,8 +80,9 @@ const ENV = process.env.NODE_ENV || '';
     AppService,
     {
       provide: APP_GUARD,
-      useValue: AccessTokenGuard,
+      useClass: AuthenticationGuard,
     },
+    AccessTokenGuard,
   ],
 })
 export class AppModule {}
