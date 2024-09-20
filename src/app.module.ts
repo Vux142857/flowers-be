@@ -1,27 +1,30 @@
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AccessTokenGuard } from './auth/guards/authentication/access-token.guard';
+import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
+
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+// Configs
+import appConfig from './config/app.config';
+import databaseConfig from './config/database.config';
+import environmentValidation from './config/environment.validation';
+import { JwtModule } from '@nestjs/jwt';
+import jwtConfig from './auth/config/jwt.config';
+// Import Enitities/Modules
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
-import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoriesModule } from './categories/categories.module';
 import { PaymentsModule } from './payments/payments.module';
 import { SuggestionsModule } from './suggestions/suggestions.module';
 import { OrdersModule } from './orders/orders.module';
 import { TagsModule } from './tags/tags.module';
 import { OrderItemsModule } from './order-items/order-items.module';
 import { CouponsModule } from './coupons/coupons.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PaginationModule } from './common/pagination/pagination.module';
-import appConfig from './config/app.config';
-import databaseConfig from './config/database.config';
-import environmentValidation from './config/environment.validation';
-import { JwtModule } from '@nestjs/jwt';
-import jwtConfig from './auth/config/jwt.config';
-import { AccessTokenGuard } from './auth/guards/access-token.guard';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthenticationGuard } from './auth/guards/authentication/authentication.guard';
 
 const ENV = process.env.NODE_ENV || '';
 @Module({
@@ -65,6 +68,8 @@ const ENV = process.env.NODE_ENV || '';
         };
       },
     }),
+    ConfigModule.forFeature(jwtConfig),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
     PaymentsModule,
     SuggestionsModule,
     OrdersModule,
@@ -72,8 +77,6 @@ const ENV = process.env.NODE_ENV || '';
     OrderItemsModule,
     CouponsModule,
     PaginationModule,
-    ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   controllers: [AppController],
   providers: [

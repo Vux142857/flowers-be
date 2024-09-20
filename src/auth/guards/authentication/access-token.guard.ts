@@ -5,42 +5,42 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
-import jwtConfig from '../config/jwt.config';
-import { ConfigService } from '@nestjs/config';
-import { REQUEST_USER_KEY } from '../constants/auth.constants';
+import { ConfigType } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import jwtConfig from 'src/auth/config/jwt.config';
+import { Request } from 'express';
+import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-
     @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigService<typeof jwtConfig>,
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const accessToken = this.extractTokenFromHeadr(request);
-    if (!accessToken) {
+    const token = this.extractTokenFromHeader(request);
+
+    if (!token) {
       throw new UnauthorizedException();
     }
     try {
       const payload = await this.jwtService.verifyAsync(
-        accessToken,
-        this.jwtConfiguration as JwtVerifyOptions,
+        token,
+        this.jwtConfiguration,
       );
       request[REQUEST_USER_KEY] = payload;
-    } catch (error) {
-      console.log(error);
+    } catch {
       throw new UnauthorizedException();
     }
     return true;
   }
 
-  private extractTokenFromHeadr(request: Request): string | undefined {
+  private extractTokenFromHeader(request: Request): string | undefined {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, accessToken] = request.headers['authorization'].split(' ') ?? [];
-    return accessToken;
+    const [_, token] = request.headers.authorization?.split(' ') ?? [];
+    return token;
   }
 }

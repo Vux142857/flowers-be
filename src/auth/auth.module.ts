@@ -7,9 +7,6 @@ import { BcryptProvider } from './providers/bcrypt.provider';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from './config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthenticationGuard } from './guards/authentication/authentication.guard';
-import { AccessTokenGuard } from './guards/access-token.guard';
 
 @Module({
   controllers: [AuthController],
@@ -19,11 +16,6 @@ import { AccessTokenGuard } from './guards/access-token.guard';
       provide: HashingProvider,
       useClass: BcryptProvider,
     },
-    {
-      provide: APP_GUARD,
-      useClass: AuthenticationGuard,
-    },
-    AccessTokenGuard,
   ],
   imports: [
     forwardRef(() => UsersModule),

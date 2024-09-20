@@ -25,7 +25,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
 import { Roles } from 'src/auth/decorator/authorization/role.decorator';
 import { Role } from 'src/auth/enums/role-type.enum';
@@ -45,8 +44,11 @@ export class UsersController {
   @ApiParam({ name: 'id', type: 'string', required: false })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
-  @Get('/:id?')
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseInterceptors(ClassSerializerInterceptor)
+  @Get('/:id?')
   public getUsers(
     @Param() getUserParamDto: GetByParamDto,
     @Query() getUserDto: GetUserDto,
@@ -59,12 +61,13 @@ export class UsersController {
   }
 
   @Post()
-  @Auth(AuthType.NONE)
+  @Auth(AuthType.BEARER)
   @UseInterceptors(ClassSerializerInterceptor)
   public createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
+  @Auth(AuthType.BEARER)
   @Patch('/:id')
   @UseInterceptors(ClassSerializerInterceptor)
   public patchUser(
@@ -79,8 +82,9 @@ export class UsersController {
     return this.userService.updateUser(id, patchUserDto);
   }
 
+  @Auth(AuthType.BEARER)
   @Roles(Role.ADMIN)
-  @UseGuards(AccessTokenGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Delete('/:id')
   public deleteUser(@Param() deleteUserParamDto: RequireParamDto) {
     this.userService.deleteUser(deleteUserParamDto.id);

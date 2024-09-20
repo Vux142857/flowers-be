@@ -15,6 +15,8 @@ import { GetByParamDto } from 'src/common/get-by-param';
 import { RequireParamDto } from 'src/common/require-param';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './providers/categories.service';
+import { Auth } from 'src/auth/decorator/auth.decorator';
+import { AuthType } from 'src/auth/enums/auth-type.enum';
 
 @Controller('categories')
 @ApiTags('Categories')
@@ -22,6 +24,7 @@ export class CategoriesController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get('/:id?')
+  @Auth(AuthType.NONE)
   @ApiOperation({
     summary: 'Get all categories or get only one category by id',
   })
