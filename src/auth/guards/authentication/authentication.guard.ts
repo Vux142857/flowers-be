@@ -8,7 +8,11 @@ import {
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { Reflector } from '@nestjs/core';
 import { AccessTokenGuard } from './access-token.guard';
-import { AUTH_TYPE_KEY } from 'src/auth/constants/auth.constants';
+import {
+  AUTH_TYPE_KEY,
+  REQUEST_USER_KEY,
+} from 'src/auth/constants/auth.constants';
+import { StatusType } from 'src/common/statusType.enum';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -34,25 +38,23 @@ export class AuthenticationGuard implements CanActivate {
       AUTH_TYPE_KEY,
       [context.getHandler(), context.getClass()],
     ) ?? [AuthenticationGuard.defaultAuthType];
-
+    console.log(authTypes);
     const guards = authTypes.map((type) => this.authTypeGuardMap[type]).flat();
-
+    console.log(guards);
     // Declare the default error
     let error = new UnauthorizedException();
 
     for (const instance of guards) {
-      // Decalre a new constant
       const canActivate = await Promise.resolve(
-        // Here the AccessToken Guard Will be fired and check if user has permissions to acces
-        // Later Multiple AuthTypes can be used even if one of them returns true
-        // The user is Authorised to access the resource
         instance.canActivate(context),
       ).catch((err) => {
         error = err;
       });
 
       if (canActivate) {
-        return true;
+        const request = context.switchToHttp().getRequest();
+        const authenticatedUser = request[REQUEST_USER_KEY];
+        return authenticatedUser?.status == StatusType.ACTIVE ? true : false;
       }
     }
 

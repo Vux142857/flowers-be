@@ -36,7 +36,12 @@ export class AuthService {
     }
 
     const accessToken = await this.jwtService.signAsync(
-      { email: user.email, sub: user.id, roles: user.roles },
+      {
+        email: user.email,
+        sub: user.id,
+        roles: user.roles,
+        status: user.status,
+      },
       {
         secret: this.jwtConfiguration.secret,
         audience: this.jwtConfiguration.audience,
@@ -53,7 +58,12 @@ export class AuthService {
       throw new UnauthorizedException('Invalid user');
     }
     const accessToken = await this.jwtService.signAsync(
-      { email: newUser.email, sub: newUser.id, roles: newUser.roles },
+      {
+        email: newUser.email,
+        sub: newUser.id,
+        roles: newUser.roles,
+        status: newUser.status,
+      },
       {
         secret: this.jwtConfiguration.secret,
         audience: this.jwtConfiguration.audience,
