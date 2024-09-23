@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { User } from 'src/users/user.entity';
-import { ActiveUserPayload } from '../interfaces/active-user-payload';
+import { ActiveUserPayload } from '../interfaces/active-user-payload.interface';
 
 @Injectable()
 export class GenerateTokensProvider {
@@ -41,7 +41,7 @@ export class GenerateTokensProvider {
           status: user.status,
         },
       ),
-      // Refresh token is not signed with any payload
+      // Refresh token is not signed with ActiveUserPayload
       this.signToken(user.id, this.jwtConfiguration.refreshTokenExpiresIn),
     ]);
     return { accessToken, refreshToken };

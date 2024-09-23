@@ -11,6 +11,8 @@ import { SignUpDto } from '../dtos/signUp.dto';
 import { GenerateTokensProvider } from './generate-tokens.provider';
 import jwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
+import { RefreshTokensProvider } from './refresh-tokens.provider';
+import { RefreshTokenDto } from '../dtos/refresh-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +26,8 @@ export class AuthService {
 
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+
+    private readonly refreshTokenProvider: RefreshTokensProvider,
   ) {}
 
   async signIn(signInDto: SignInDto) {
@@ -42,5 +46,9 @@ export class AuthService {
       throw new UnauthorizedException('Invalid user');
     }
     return await this.generateTokensProvider.generateTokens(newUser);
+  }
+
+  async refreshToken(refreshTokenDto: RefreshTokenDto) {
+    return await this.refreshTokenProvider.refreshTokens(refreshTokenDto);
   }
 }
