@@ -32,8 +32,8 @@ export class User {
   address: string;
 
   @Exclude()
-  @Column({ type: 'varchar', length: 128, nullable: false })
-  password: string;
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  password?: string;
 
   @Column({ type: 'uuid', nullable: true, unique: true })
   @Index()

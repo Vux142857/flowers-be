@@ -12,6 +12,9 @@ import { User } from '../user.entity';
 import { Repository } from 'typeorm';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
+import { CreateGoogleUserProvider } from './create-google-user.provider';
+import { GoogleUser } from '../interfaces/google-user.interface';
 
 @Injectable()
 export class UserService {
@@ -23,6 +26,10 @@ export class UserService {
     private readonly hashingProvider: HashingProvider,
 
     private readonly paginationProvider: PaginationProvider,
+
+    private readonly findOneByGoogleIdProvider: FindOneByGoogleIdProvider,
+
+    private readonly createGoogleUserProvider: CreateGoogleUserProvider,
   ) {}
 
   async findAll(limit: number, page: number) {
@@ -62,5 +69,13 @@ export class UserService {
 
   public deleteUser(id: string) {
     return this.userRepository.delete(id);
+  }
+
+  async findOneByGoogleId(googleId: string) {
+    return await this.findOneByGoogleIdProvider.findOneByGoogleId(googleId);
+  }
+
+  async createGoogleUser(googleUser: GoogleUser) {
+    return await this.createGoogleUserProvider.createGoogleUser(googleUser);
   }
 }
