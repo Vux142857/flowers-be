@@ -9,5 +9,9 @@ export default registerAs('jwt', () => {
       process.env.JWT_ACCESS_TOKEN_TTL ?? '7200',
       10,
     ),
+    refreshTokenExpiresIn: parseInt(
+      process.env.JWT_REFRESH_TOKEN_TTL ?? '86400',
+      10,
+    ),
   };
 });

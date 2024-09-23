@@ -9,15 +9,15 @@ import { Auth } from './decorator/auth.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('sign-in')
   @Auth(AuthType.NONE)
+  @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   async signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto);
   }
 
-  @Post('sign-up')
   @Auth(AuthType.NONE)
+  @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);

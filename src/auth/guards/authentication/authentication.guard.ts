@@ -38,9 +38,7 @@ export class AuthenticationGuard implements CanActivate {
       AUTH_TYPE_KEY,
       [context.getHandler(), context.getClass()],
     ) ?? [AuthenticationGuard.defaultAuthType];
-    console.log(authTypes);
     const guards = authTypes.map((type) => this.authTypeGuardMap[type]).flat();
-    console.log(guards);
     // Declare the default error
     let error = new UnauthorizedException();
 
@@ -51,10 +49,12 @@ export class AuthenticationGuard implements CanActivate {
         error = err;
       });
 
-      if (canActivate) {
+      if (canActivate && authTypes.includes(AuthType.BEARER)) {
         const request = context.switchToHttp().getRequest();
         const authenticatedUser = request[REQUEST_USER_KEY];
         return authenticatedUser?.status == StatusType.ACTIVE ? true : false;
+      } else if (canActivate && authTypes.includes(AuthType.NONE)) {
+        return true;
       }
     }
 

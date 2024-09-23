@@ -7,10 +7,10 @@ import {
 import { UserService } from 'src/users/providers/users.service';
 import { HashingProvider } from './hashing.provider';
 import { SignInDto } from '../dtos/signIn.dto';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigType } from '@nestjs/config';
-import jwtConfig from '../config/jwt.config';
 import { SignUpDto } from '../dtos/signUp.dto';
+import { GenerateTokensProvider } from './generate-tokens.provider';
+import jwtConfig from '../config/jwt.config';
+import { ConfigType } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -20,8 +20,7 @@ export class AuthService {
 
     private readonly hashingProvider: HashingProvider,
 
-    @Inject(JwtService)
-    private readonly jwtService: JwtService,
+    private readonly generateTokensProvider: GenerateTokensProvider,
 
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
@@ -34,22 +33,7 @@ export class AuthService {
     if (!isValid) {
       throw new UnauthorizedException('Invalid password');
     }
-
-    const accessToken = await this.jwtService.signAsync(
-      {
-        email: user.email,
-        sub: user.id,
-        roles: user.roles,
-        status: user.status,
-      },
-      {
-        secret: this.jwtConfiguration.secret,
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        expiresIn: this.jwtConfiguration.accessTokenExpiresIn,
-      },
-    );
-    return { accessToken };
+    return await this.generateTokensProvider.generateTokens(user);
   }
 
   async signUp(signUpDto: SignUpDto) {
@@ -57,20 +41,6 @@ export class AuthService {
     if (!newUser) {
       throw new UnauthorizedException('Invalid user');
     }
-    const accessToken = await this.jwtService.signAsync(
-      {
-        email: newUser.email,
-        sub: newUser.id,
-        roles: newUser.roles,
-        status: newUser.status,
-      },
-      {
-        secret: this.jwtConfiguration.secret,
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        expiresIn: this.jwtConfiguration.accessTokenExpiresIn,
-      },
-    );
-    return { accessToken };
+    return await this.generateTokensProvider.generateTokens(newUser);
   }
 }
