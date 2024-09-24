@@ -75,4 +75,18 @@ export class ProductService {
   async deleteProduct(id: string) {
     return await this.productRepository.delete(id);
   }
+
+  async checkStock(productId: string, quantity: number): Promise<boolean> {
+    const product = await this.getProductById(productId);
+    return product.remaining >= quantity;
+  }
+
+  async decreaseStock(productId: string, quantity: number): Promise<void> {
+    const product = await this.getProductById(productId);
+    if (product.remaining < quantity) {
+      throw new Error(`Insufficient stock for product ${product.name}`);
+    }
+    product.remaining -= quantity;
+    await this.productRepository.save(product);
+  }
 }
