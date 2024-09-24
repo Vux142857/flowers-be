@@ -22,7 +22,6 @@ import { PaymentsModule } from './payments/payments.module';
 import { SuggestionsModule } from './suggestions/suggestions.module';
 import { OrdersModule } from './orders/orders.module';
 import { TagsModule } from './tags/tags.module';
-import { OrderItemsModule } from './order-items/order-items.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { PaginationModule } from './common/pagination/pagination.module';
 
@@ -74,7 +73,6 @@ const ENV = process.env.NODE_ENV || '';
     SuggestionsModule,
     OrdersModule,
     TagsModule,
-    OrderItemsModule,
     CouponsModule,
     PaginationModule,
   ],

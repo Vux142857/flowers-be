@@ -1,7 +1,7 @@
 import { Category } from 'src/categories/category.entity';
 import { StatusType } from 'src/common/statusType.enum';
 import { Coupon } from 'src/coupons/coupon.entity';
-import { OrderItem } from 'src/order-items/order-items.entity';
+import { OrderItem } from 'src/orders/entities/order-items.entity';
 import { Suggestion } from 'src/suggestions/suggestion.entity';
 import { Tag } from 'src/tags/tag.entity';
 import {
