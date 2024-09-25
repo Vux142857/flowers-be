@@ -1,14 +1,15 @@
-import {
-  Injectable,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Order from '../entities/order.entity';
 import { OrderItem } from '../entities/order-items.entity';
-import { ProductService } from 'src/products/providers/product.service';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { CreateOrderProvider } from './create-order.provider';
 import { CreateOrderDto } from '../dtos/create-order.dto';
+import { PatchOrderDto } from '../dtos/patch-order.dto';
+import { User } from 'src/users/user.entity';
+import { UpdateStatusOrderDto } from '../dtos/update-status-order.dto';
 
 @Injectable()
 export class OrderService {
@@ -19,75 +20,46 @@ export class OrderService {
     @InjectRepository(OrderItem)
     private readonly orderItemRepository: Repository<OrderItem>,
 
-    private readonly productService: ProductService,
+    private readonly paginationProvider: PaginationProvider,
+
+    private readonly createOrderProvider: CreateOrderProvider,
   ) {}
 
-  async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
-    const queryRunner =
-      this.orderRepository.manager.connection.createQueryRunner();
-    await queryRunner.startTransaction();
+  async getOrders(limit: number, page: number): Promise<Paginated<Order>> {
+    return await this.paginationProvider.paginateQuery<Order>(
+      { limit, page },
+      this.orderRepository,
+    );
+  }
 
-    try {
-      const { customer, total, orderItems } = createOrderDto;
-
-      // Create Order entity
-      const order = this.orderRepository.create({
-        customer,
-        total,
-        statusOrder: createOrderDto.statusOrder,
-      });
-
-      // Process OrderItem
-      const processedOrderItems: OrderItem[] = [];
-
-      for (const itemDto of orderItems) {
-        const product = await this.productService.getProductById(
-          itemDto.product.id,
-        );
-
-        if (!product) {
-          throw new NotFoundException(
-            `Product with ID ${itemDto.product.id} not found`,
-          );
-        }
-
-        // Check stock before save OrderItem
-        const isAvailable = await this.productService.checkStock(
-          product.id,
-          itemDto.quantity,
-        );
-        if (!isAvailable) {
-          throw new ConflictException(
-            `Product ${product.name} is out of stock`,
-          );
-        }
-
-        // Save OrderItem
-        const orderItem = this.orderItemRepository.create({
-          product,
-          quantity: itemDto.quantity,
-          subTotal: itemDto.subTotal,
-          order,
-        });
-
-        // Derease stock
-        await this.productService.decreaseStock(product.id, itemDto.quantity);
-
-        processedOrderItems.push(orderItem);
-      }
-
-      // Save Order and OrderItems
-      order.orderItems = processedOrderItems;
-      await queryRunner.manager.save(Order, order);
-      await queryRunner.manager.save(OrderItem, processedOrderItems);
-
-      await queryRunner.commitTransaction();
-      return order;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw error;
-    } finally {
-      await queryRunner.release();
+  async getOrderById(id: string) {
+    const order = await this.orderRepository.findOneBy({ id });
+    if (!order) {
+      throw new NotFoundException(`Order with id ${id} not found`);
     }
+    return order;
+  }
+
+  async createOrder(createOrderDto: CreateOrderDto, customer: User) {
+    return this.createOrderProvider.createOrder(createOrderDto, customer);
+  }
+
+  async updateOrder(id: string, payload: PatchOrderDto) {
+    const order = await this.orderRepository.findOneBy({ id });
+    if (!order) {
+      throw new NotFoundException(`Order with id ${id} not found`);
+    }
+    return await this.orderRepository.save({ ...order, ...payload });
+  }
+
+  async updateStatusOrder(id: string, statusOrder: UpdateStatusOrderDto) {
+    const order = await this.orderRepository.findOneBy({ id });
+    if (!order) {
+      throw new NotFoundException(`Order with id ${id} not found`);
+    }
+    return await this.orderRepository.update(
+      { id },
+      { statusOrder: statusOrder.statusOrder },
+    );
   }
 }

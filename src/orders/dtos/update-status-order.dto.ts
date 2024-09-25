@@ -4,5 +4,5 @@ import { StatusOrder } from '../enum/StatusOrder.enum';
 export class UpdateStatusOrderDto {
   @IsNotEmpty()
   @IsEnum(StatusOrder)
-  status: StatusOrder;
+  statusOrder: StatusOrder;
 }

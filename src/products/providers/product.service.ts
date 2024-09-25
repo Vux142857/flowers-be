@@ -18,10 +18,7 @@ export class ProductService {
     private readonly paginationProvider: PaginationProvider,
   ) {}
 
-  public async getProducts(
-    limit: number,
-    page: number,
-  ): Promise<Paginated<Product>> {
+  async getProducts(limit: number, page: number): Promise<Paginated<Product>> {
     return await this.paginationProvider.paginateQuery<Product>(
       { limit, page },
       this.productRepository,
