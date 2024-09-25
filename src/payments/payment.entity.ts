@@ -25,7 +25,7 @@ export class Payment {
   @Column({
     type: 'enum',
     enum: PaymentType,
-    default: PaymentType.COD,
+    default: PaymentType.COD, // ["banking", "cod"]
   })
   paymentType: string;
 

@@ -1,12 +1,12 @@
 import {
   Body,
   Controller,
-  ExecutionContext,
   Get,
   Param,
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Auth } from 'src/auth/decorator/auth.decorator';
@@ -23,7 +23,7 @@ import { RequireParamDto } from 'src/common/require-param';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 
 @Auth(AuthType.BEARER)
-@Roles(Role.CUSTOMER)
+@Roles(Role.CUSTOMER, Role.ADMIN)
 @UseGuards(RolesGuard)
 @Controller('orders')
 export class OrdersController {
@@ -45,10 +45,9 @@ export class OrdersController {
   @Post()
   async createOrder(
     @Body() createOrderDto: CreateOrderDto,
-    context: ExecutionContext,
+    @Req() req: Request,
   ) {
-    const request = context.switchToHttp().getRequest();
-    const user = request[REQUEST_USER_KEY];
+    const user = req[REQUEST_USER_KEY];
     return this.orderService.createOrder(createOrderDto, user);
   }
 }
@@ -73,16 +72,6 @@ export class OrdersAdminController {
     return id
       ? this.orderService.getOrderById(id)
       : this.orderService.getOrders(limit, page);
-  }
-
-  @Post()
-  async createOrder(
-    @Body() createOrderDto: CreateOrderDto,
-    context: ExecutionContext,
-  ) {
-    const request = context.switchToHttp().getRequest();
-    const admin = request[REQUEST_USER_KEY];
-    return this.orderService.createOrder(createOrderDto, admin);
   }
 
   @Patch('/:id')

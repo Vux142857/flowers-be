@@ -9,9 +9,9 @@ class OrderItemDto {
   @Type(() => Number)
   quantity: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => Number)
-  subTotal: number;
+  subTotal?: number = 0;
 
   @IsNotEmpty()
   @Type(() => Product)
@@ -19,9 +19,9 @@ class OrderItemDto {
 }
 
 export class CreateOrderDto {
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => Number)
-  total: number;
+  total?: number = 0;
 
   @IsNotEmpty()
   @IsEnum(StatusOrder)
