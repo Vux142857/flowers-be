@@ -3,11 +3,12 @@ import { CategoriesController } from './categories.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { CategoryService } from './providers/categories.service';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
 
 @Module({
   controllers: [CategoriesController],
   providers: [CategoryService],
-  imports: [TypeOrmModule.forFeature([Category])],
+  imports: [TypeOrmModule.forFeature([Category]), PaginationModule],
   exports: [CategoryService],
 })
 export class CategoriesModule {}

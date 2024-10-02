@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { GetCategoryDto } from './dtos/get-category.dto';
 import { CreateCategoryDto } from './dtos/create-category.dto';
@@ -17,6 +18,9 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './providers/categories.service';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { Role } from 'src/auth/enums/role-type.enum';
+import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
+import { Roles } from 'src/auth/decorator/authorization/role.decorator';
 
 @Controller('categories')
 @ApiTags('Categories')
@@ -45,11 +49,17 @@ export class CategoriesController {
       : this.categoryService.getCategories(limit, page);
   }
 
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @Post()
   createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     return this.categoryService.createCategory(createCategoryDto);
   }
 
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @Patch('/:id')
   updateCategory(
     @Param() patchCategory: RequireParamDto,
@@ -59,6 +69,9 @@ export class CategoriesController {
     return this.categoryService.updateCategory(id, patchCategoryDto);
   }
 
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @Delete('/:id')
   deleteCategory(@Param() deleteCategory: RequireParamDto) {
     const { id } = deleteCategory;

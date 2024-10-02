@@ -4,25 +4,26 @@ import { PatchCategoryDto } from '../dtos/patch-category.dto';
 import { Category } from '../category.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
   async getCategories(limit: number, page: number) {
-    return await this.categoryRepository.find({
-      take: limit,
-      skip: page * limit,
-    });
+    return await this.paginationProvider.paginateQuery<Category>(
+      { limit, page },
+      this.categoryRepository,
+    );
   }
 
   async getCategory(id: string) {
-    return await this.categoryRepository.findOne({
-      where: { id },
-    });
+    return await this.categoryRepository.findOneBy({ id });
   }
 
   async createCategory(payload: CreateCategoryDto) {
