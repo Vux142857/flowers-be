@@ -50,7 +50,6 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   refreshToken: string;
 
-  @Exclude()
   @Column({
     type: 'enum',
     enum: StatusType,

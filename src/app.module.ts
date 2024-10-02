@@ -24,6 +24,8 @@ import { OrdersModule } from './orders/orders.module';
 import { TagsModule } from './tags/tags.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { PaginationModule } from './common/pagination/pagination.module';
+import { SearchModule } from './common/search/search.module';
+import { FilterModule } from './common/filter/filter.module';
 
 const ENV = process.env.NODE_ENV || '';
 @Module({
@@ -75,6 +77,8 @@ const ENV = process.env.NODE_ENV || '';
     TagsModule,
     CouponsModule,
     PaginationModule,
+    SearchModule,
+    FilterModule,
   ],
   controllers: [AppController],
   providers: [
