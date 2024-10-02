@@ -62,4 +62,12 @@ export class OrderService {
       { statusOrder: statusOrder.statusOrder },
     );
   }
+
+  async deleteOrder(id: string) {
+    const order = await this.orderRepository.findOneBy({ id });
+    if (!order) {
+      throw new NotFoundException(`Order with id ${id} not found`);
+    }
+    return await this.orderRepository.remove(order);
+  }
 }

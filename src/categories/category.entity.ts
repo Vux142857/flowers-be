@@ -28,7 +28,10 @@ export class Category {
   })
   status: string;
 
-  @OneToMany(() => Product, (product) => product.category, { nullable: true })
+  @OneToMany(() => Product, (product) => product.category, {
+    nullable: true,
+    cascade: ['remove', 'update'],
+  })
   products?: Product[];
 
   @CreateDateColumn({ type: 'timestamp' })

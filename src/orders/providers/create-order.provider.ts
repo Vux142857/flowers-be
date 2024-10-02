@@ -71,24 +71,25 @@ export class CreateOrderProvider {
         const orderItem = this.orderItemRepository.create({
           product,
           quantity: itemDto.quantity,
-          subTotal: itemDto.subTotal,
+          subTotal,
           order: savedOrder,
         });
 
         // Derease stock
-        await queryRunner.manager.save(OrderItem, orderItem);
-        await this.productService.decreaseStock(product.id, itemDto.quantity);
+        await Promise.all([
+          this.productService.decreaseStock(product.id, itemDto.quantity),
+          queryRunner.manager.save(OrderItem, orderItem),
+        ]);
 
         processedOrderItems.push(orderItem);
       }
 
       // Save Order and OrderItems
-      order.orderItems = processedOrderItems;
-      order.total = total;
-      await queryRunner.manager.save(Order, order);
-
+      savedOrder.orderItems = processedOrderItems;
+      savedOrder.total = total;
+      await queryRunner.manager.save(Order, savedOrder);
       await queryRunner.commitTransaction();
-      return order;
+      return savedOrder;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

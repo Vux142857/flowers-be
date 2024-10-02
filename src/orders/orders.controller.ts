@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -81,5 +82,11 @@ export class OrdersAdminController {
   ) {
     const { id } = patchOrderParamDto;
     return this.orderService.updateOrder(id, patchOrderDto);
+  }
+
+  @Delete('/:id')
+  async deleteOrder(@Param() getOrderParamDto: GetByParamDto) {
+    const { id } = getOrderParamDto;
+    return this.orderService.deleteOrder(id);
   }
 }

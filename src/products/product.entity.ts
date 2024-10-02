@@ -56,11 +56,14 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.products, {
     nullable: false,
     eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   category: Category;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product, {
     nullable: true,
+    cascade: ['update', 'remove'],
   })
   orderItems?: OrderItem[];
 

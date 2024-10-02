@@ -1,7 +1,9 @@
+import { Product } from 'src/products/product.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +15,12 @@ export class Suggestion {
 
   @Column({ type: 'varchar', length: 100, nullable: false })
   listCombination: string[];
+
+  @OneToOne(() => Product, (product) => product.suggestion, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  product: Product;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

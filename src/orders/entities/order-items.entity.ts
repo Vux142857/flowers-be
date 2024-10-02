@@ -1,6 +1,7 @@
 import { Product } from 'src/products/product.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Order from './order.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class OrderItem {
@@ -13,9 +14,18 @@ export class OrderItem {
   @Column({ type: 'decimal', nullable: false })
   subTotal: number;
 
-  @ManyToOne(() => Order, (order) => order.orderItems, { nullable: false })
+  @Exclude()
+  @ManyToOne(() => Order, (order) => order.orderItems, {
+    nullable: false,
+    eager: false,
+    onDelete: 'CASCADE',
+  })
   order: Order;
 
-  @ManyToOne(() => Product, (product) => product.orderItems, { eager: true })
+  @ManyToOne(() => Product, (product) => product.orderItems, {
+    eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   product: Product;
 }
