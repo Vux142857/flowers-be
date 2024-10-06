@@ -52,10 +52,15 @@ const ENV = process.env.NODE_ENV || '';
           database: configService.get('database.database'),
           synchronize: configService.get('database.synchronize'),
           autoLoadEntities: configService.get('database.autoLoadEntities'),
-          JWT_SECRET: configService.get('jwt.JWT_SECRET'),
-          JWT_AUDIENCE: configService.get('jwt.JWT_AUDIENCE'),
-          JWT_ISSUER: configService.get('jwt.JWT_ISSUER'),
-          JWT_EXPIRES_IN: configService.get('jwt.JWT_ACCESS_TOKEN_TTL'),
+          // JWT_SECRET: configService.get('jwt.secret'),
+          // JWT_AUDIENCE: configService.get('jwt.audience'),
+          // JWT_ISSUER: configService.get('jwt.issuer'),
+          // JWT_EXPIRES_IN: configService.get('jwt.accessTokenExpiresIn'),
+          // JWT_REFRESH_EXPIRES_IN: configService.get(
+          //   'jwt.refreshTokenExpiresIn',
+          // ),
+          // GOOGLE_CLIENT_ID: configService.get('jwt.googleClientId'),
+          // GOOGLE_CLIENT_SECRET: configService.get('jwt.googleClientSecret'),
         });
         return {
           type: 'postgres',
@@ -66,6 +71,15 @@ const ENV = process.env.NODE_ENV || '';
           database: configService.get('database.database'),
           synchronize: configService.get('database.synchronize'),
           autoLoadEntities: configService.get('database.autoLoadEntities'),
+          JWT_SECRET: configService.get('jwt.secret'),
+          JWT_AUDIENCE: configService.get('jwt.audience'),
+          JWT_ISSUER: configService.get('jwt.issuer'),
+          JWT_EXPIRES_IN: configService.get('jwt.accessTokenExpiresIn'),
+          JWT_REFRESH_EXPIRES_IN: configService.get(
+            'jwt.refreshTokenExpiresIn',
+          ),
+          GOOGLE_CLIENT_ID: configService.get('jwt.googleClientId'),
+          GOOGLE_CLIENT_SECRET: configService.get('jwt.googleClientSecret'),
         };
       },
     }),

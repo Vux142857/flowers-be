@@ -41,6 +41,10 @@ export class AuthService {
   }
 
   async signUp(signUpDto: SignUpDto) {
+    const { password, confirmPassword } = signUpDto;
+    if (password !== confirmPassword) {
+      throw new UnauthorizedException('Passwords do not match');
+    }
     const newUser = await this.userService.createUser(signUpDto);
     if (!newUser) {
       throw new UnauthorizedException('Invalid user');
