@@ -36,6 +36,16 @@ import { AuthType } from 'src/auth/enums/auth-type.enum';
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('customer')
+  public getCustomer(@Query() getUserDto: GetUserDto) {
+    const { limit, page } = getUserDto;
+    return this.userService.getAllCustomer(limit, page);
+  }
+
   @ApiOperation({ summary: 'Get all users or get only one user by id' })
   @ApiResponse({
     status: 200,
