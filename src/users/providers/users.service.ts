@@ -17,6 +17,8 @@ import { CreateGoogleUserProvider } from './create-google-user.provider';
 import { GoogleUser } from '../interfaces/google-user.interface';
 import { SearchProvider } from 'src/common/search/providers/search.provider';
 import { Role } from 'src/auth/enums/role-type.enum';
+import { FilterProvider } from 'src/common/filter/providers/filter.provider';
+import { StatusType } from 'src/common/statusType.enum';
 
 @Injectable()
 export class UserService {
@@ -30,6 +32,8 @@ export class UserService {
     private readonly paginationProvider: PaginationProvider,
 
     private readonly searchProvider: SearchProvider,
+
+    private readonly filterProvider: FilterProvider,
 
     private readonly findOneByGoogleIdProvider: FindOneByGoogleIdProvider,
 
@@ -47,12 +51,11 @@ export class UserService {
     return await this.userRepository.findOneBy({ id });
   }
 
-  async getAllCustomer(limit: number, page: number) {
-    return await this.searchProvider.searchAndPaginate<User>(
+  async getAllCustomers(limit: number, page: number, status: StatusType) {
+    return await this.filterProvider.filterAndPaginate<User>(
       { limit, page },
       this.userRepository,
-      ['roles'],
-      Role.CUSTOMER,
+      { roles: Role.CUSTOMER, status },
     );
   }
 

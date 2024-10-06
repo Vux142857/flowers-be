@@ -42,8 +42,8 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('customer')
   public getCustomer(@Query() getUserDto: GetUserDto) {
-    const { limit, page } = getUserDto;
-    return this.userService.getAllCustomer(limit, page);
+    const { limit, page, status } = getUserDto;
+    return this.userService.getAllCustomers(limit, page, status);
   }
 
   @ApiOperation({ summary: 'Get all users or get only one user by id' })

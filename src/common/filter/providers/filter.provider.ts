@@ -1,9 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Any, Not, ObjectLiteral, Repository } from 'typeorm';
+import { ObjectLiteral, Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { URL } from 'url';
-import { Role } from 'src/auth/enums/role-type.enum';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
@@ -17,19 +16,13 @@ export class FilterProvider {
   async filterAndPaginate<T extends ObjectLiteral>(
     paginationQuery: PaginationQueryDto,
     repository: Repository<T>,
-    filters: Array<Record<string, any>>,
+    filters: Record<string, any>,
   ) {
-    const entityName = repository.metadata.name;
-    let query: Array<Record<string, any>> = paginationQuery.status
-      ? [{ status: paginationQuery.status }]
-      : [{}];
+    let query: Record<string, any> = paginationQuery.status
+      ? { status: paginationQuery.status }
+      : {};
 
-    // Special case for 'User' entity to exclude admins
-    if (entityName === 'User') {
-      query.push({ roles: Not(Any([Role.ADMIN])) });
-    }
-    query = [...query, ...filters];
-
+    query = { ...query, ...filters };
     const [repositories, totalItems] = await Promise.all([
       repository.find({
         where: query,
