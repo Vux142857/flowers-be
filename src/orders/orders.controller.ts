@@ -22,6 +22,7 @@ import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
 import { PatchOrderDto } from './dtos/patch-order.dto';
 import { RequireParamDto } from 'src/common/require-param';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
+import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
 
 @Auth(AuthType.BEARER)
 @Roles(Role.CUSTOMER, Role.ADMIN)
@@ -60,7 +61,19 @@ export class OrdersController {
 export class AdminOrdersController {
   constructor(private readonly orderService: OrderService) {}
 
-  // Get all orders
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Get('search')
+  searchOrders(@Query() searchQueryDto: SearchQueryDto) {
+    const { limit, page, query } = searchQueryDto;
+    return this.orderService.searchOrders(
+      { limit, page },
+      ['order_ID', 'statusOrder'],
+      query,
+    );
+  }
+
   @Auth(AuthType.BEARER)
   @UseGuards(RolesGuard)
   @Get('/:id?')

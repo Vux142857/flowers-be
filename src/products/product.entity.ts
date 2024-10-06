@@ -16,6 +16,7 @@ import {
   JoinColumn,
   ManyToMany,
   JoinTable,
+  Index,
 } from 'typeorm';
 
 @Entity()
@@ -23,6 +24,7 @@ export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column({ type: 'varchar', length: 100, nullable: false })
   name: string;
 

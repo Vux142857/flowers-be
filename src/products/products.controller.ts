@@ -27,6 +27,8 @@ import { Roles } from 'src/auth/decorator/authorization/role.decorator';
 import { Role } from 'src/auth/enums/role-type.enum';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
+import { FilterProductDto } from './dtos/filter-product.dto';
 
 @Auth(AuthType.NONE)
 @Controller('products')
@@ -52,6 +54,12 @@ export class ProductsController {
       ? this.productService.getProductById(id)
       : this.productService.getProducts(limit, page);
   }
+
+  @Get('search')
+  searchProducts(@Query() searchQueryDto: SearchQueryDto) {
+    const { limit, page, query } = searchQueryDto;
+    return this.productService.searchProducts({ limit, page }, ['name'], query);
+  }
 }
 
 @Auth(AuthType.BEARER)
@@ -75,6 +83,25 @@ export class AdminProductController {
     return id
       ? this.productService.getProductById(id)
       : this.productService.getProductsByStatus(limit, page, status);
+  }
+
+  @Get('search')
+  searchProducts(@Query() searchQueryDto: SearchQueryDto) {
+    const { limit, page, query } = searchQueryDto;
+    return this.productService.searchProducts(
+      { limit, page },
+      ['name', 'status', 'category'],
+      query,
+    );
+  }
+
+  @Get('filter')
+  filterProducts(@Query() searchQueryDto: FilterProductDto) {
+    const { limit, page, category, status } = searchQueryDto;
+    return this.productService.filterProducts(limit, page, {
+      category,
+      status,
+    });
   }
 
   @Post()

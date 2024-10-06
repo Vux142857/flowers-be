@@ -22,7 +22,7 @@ export default class Order {
   id: string;
 
   // Readable ID
-  @Index()
+  @Index({ fulltext: true })
   @Column({ type: 'varchar', length: 20, nullable: false })
   order_ID: string;
 

@@ -13,6 +13,7 @@ import { Category } from 'src/categories/category.entity';
 import { TagsModule } from 'src/tags/tags.module';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
 import { SearchModule } from 'src/common/search/search.module';
+import { FilterModule } from 'src/common/filter/filter.module';
 
 @Module({
   controllers: [ProductsController, AdminProductController],
@@ -25,6 +26,7 @@ import { SearchModule } from 'src/common/search/search.module';
     TagsModule,
     PaginationModule,
     SearchModule,
+    FilterModule,
   ],
   exports: [ProductService],
 })

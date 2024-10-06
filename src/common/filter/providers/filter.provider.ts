@@ -17,26 +17,18 @@ export class FilterProvider {
   async filterAndPaginate<T extends ObjectLiteral>(
     paginationQuery: PaginationQueryDto,
     repository: Repository<T>,
-    filters: { [key: string]: any },
+    filters: Array<Record<string, any>>,
   ) {
     const entityName = repository.metadata.name;
-    let query: any = paginationQuery.status
-      ? { status: paginationQuery.status }
-      : {};
-
-    // Apply additional filters
-    query = {
-      ...query,
-      ...filters,
-    };
+    let query: Array<Record<string, any>> = paginationQuery.status
+      ? [{ status: paginationQuery.status }]
+      : [{}];
 
     // Special case for 'User' entity to exclude admins
     if (entityName === 'User') {
-      query = {
-        ...query,
-        roles: Not(Any([Role.ADMIN])),
-      };
+      query.push({ roles: Not(Any([Role.ADMIN])) });
     }
+    query = [...query, ...filters];
 
     const [repositories, totalItems] = await Promise.all([
       repository.find({

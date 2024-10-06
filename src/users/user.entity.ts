@@ -18,13 +18,15 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column({ type: 'varchar', length: 96, nullable: true })
   firstName: string;
 
+  @Index()
   @Column({ type: 'varchar', length: 96, nullable: true })
   lastName: string;
 
-  @Index()
+  @Index({ fulltext: true })
   @Column({ type: 'varchar', length: 128, nullable: false, unique: true })
   email: string;
 

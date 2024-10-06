@@ -21,6 +21,7 @@ import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { Role } from 'src/auth/enums/role-type.enum';
 import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
 import { Roles } from 'src/auth/decorator/authorization/role.decorator';
+import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
 
 @Controller('categories')
 @ApiTags('Categories')
@@ -47,6 +48,20 @@ export class CategoriesController {
     return id
       ? this.categoryService.getCategory(id)
       : this.categoryService.getCategories(limit, page);
+  }
+
+  @Get('/:id?')
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Get('search')
+  searchCategories(@Query() searchQueryDto: SearchQueryDto) {
+    const { limit, page, query } = searchQueryDto;
+    return this.categoryService.searchCategories(
+      { limit, page },
+      ['name'],
+      query,
+    );
   }
 
   @Auth(AuthType.BEARER)

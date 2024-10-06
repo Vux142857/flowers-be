@@ -5,6 +5,8 @@ import { Category } from '../category.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
+import { SearchProvider } from 'src/common/search/providers/search.provider';
 
 @Injectable()
 export class CategoryService {
@@ -13,6 +15,8 @@ export class CategoryService {
     private readonly categoryRepository: Repository<Category>,
 
     private readonly paginationProvider: PaginationProvider,
+
+    private readonly searchProvider: SearchProvider,
   ) {}
 
   async getCategories(limit: number, page: number) {
@@ -24,6 +28,19 @@ export class CategoryService {
 
   async getCategory(id: string) {
     return await this.categoryRepository.findOneBy({ id });
+  }
+
+  async searchCategories(
+    paginationQuery: PaginationQueryDto,
+    fields: string[],
+    query: string,
+  ) {
+    return await this.searchProvider.searchAndPaginate<Category>(
+      paginationQuery,
+      this.categoryRepository,
+      fields,
+      query,
+    );
   }
 
   async createCategory(payload: CreateCategoryDto) {

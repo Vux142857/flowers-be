@@ -10,6 +10,8 @@ import { CreateOrderDto } from '../dtos/create-order.dto';
 import { PatchOrderDto } from '../dtos/patch-order.dto';
 import { User } from 'src/users/user.entity';
 import { UpdateStatusOrderDto } from '../dtos/update-status-order.dto';
+import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
+import { SearchProvider } from 'src/common/search/providers/search.provider';
 
 @Injectable()
 export class OrderService {
@@ -23,6 +25,8 @@ export class OrderService {
     private readonly paginationProvider: PaginationProvider,
 
     private readonly createOrderProvider: CreateOrderProvider,
+
+    private readonly searchProvider: SearchProvider,
   ) {}
 
   async getOrders(limit: number, page: number): Promise<Paginated<Order>> {
@@ -38,6 +42,19 @@ export class OrderService {
       throw new NotFoundException(`Order with id ${id} not found`);
     }
     return order;
+  }
+
+  async searchOrders(
+    paginationQuery: PaginationQueryDto,
+    fields: string[],
+    query: string,
+  ) {
+    return await this.searchProvider.searchAndPaginate<Order>(
+      paginationQuery,
+      this.orderRepository,
+      fields,
+      query,
+    );
   }
 
   async createOrder(createOrderDto: CreateOrderDto, customer: User) {

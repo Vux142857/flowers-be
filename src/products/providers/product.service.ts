@@ -10,6 +10,9 @@ import { PaginationProvider } from 'src/common/pagination/providers/pagination.p
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { SearchProvider } from 'src/common/search/providers/search.provider';
 import { StatusType } from 'src/common/statusType.enum';
+import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
+import { FilterProvider } from 'src/common/filter/providers/filter.provider';
+import { FilterProductDto } from '../dtos/filter-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -20,6 +23,8 @@ export class ProductService {
     private readonly paginationProvider: PaginationProvider,
 
     private readonly searchProvider: SearchProvider,
+
+    private readonly filterProvider: FilterProvider,
   ) {}
 
   async getProducts(limit: number, page: number): Promise<Paginated<Product>> {
@@ -33,6 +38,32 @@ export class ProductService {
     return await this.paginationProvider.paginateQuery<Product>(
       { limit, page, status },
       this.productRepository,
+    );
+  }
+
+  async filterProducts(
+    limit: number,
+    page: number,
+    filterProductDto: FilterProductDto,
+  ) {
+    const { category, status } = filterProductDto;
+    return await this.filterProvider.filterAndPaginate<Product>(
+      { limit, page, status },
+      this.productRepository,
+      [{ category }, { status }],
+    );
+  }
+
+  async searchProducts(
+    paginationQuery: PaginationQueryDto,
+    fields: string[],
+    query: string,
+  ) {
+    return await this.searchProvider.searchAndPaginate<Product>(
+      paginationQuery,
+      this.productRepository,
+      fields,
+      query,
     );
   }
 

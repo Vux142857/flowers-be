@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Any, ILike, Not, ObjectLiteral, Repository } from 'typeorm';
+import { Any, Like, Not, ObjectLiteral, Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { URL } from 'url';
@@ -21,38 +21,34 @@ export class SearchProvider {
     searchTerm: string,
   ) {
     const entityName = repository.metadata.name;
-    let query: any = paginationQuery.status
-      ? { status: paginationQuery.status }
-      : {};
 
-    // Search logic: dynamically build search query using ILike for partial matches
+    let query: Array<Record<string, any>> = paginationQuery.status
+      ? [{ status: paginationQuery.status }]
+      : [];
+
     if (searchTerm) {
-      query = {
-        ...query,
-        ...searchFields.reduce((acc, field) => {
-          acc[field] = ILike(`%${searchTerm}%`);
-          return acc;
-        }, {}),
-      };
+      const searchConditions = searchFields.map((field) => ({
+        [field]: Like(`%${searchTerm}%`),
+      }));
+      query = [...query, ...searchConditions];
     }
 
-    // Special case for 'User' entity to exclude admins
+    // Exclude admins
     if (entityName === 'User') {
-      query = {
-        ...query,
+      query.push({
         roles: Not(Any([Role.ADMIN])),
-      };
+      });
     }
 
     const [repositories, totalItems] = await Promise.all([
       repository.find({
-        where: query,
+        where: query.length > 0 ? query : undefined,
         skip: (paginationQuery.page - 1) * paginationQuery.limit,
         take: paginationQuery.limit,
         order: { createdAt: 'DESC' } as any,
       }),
       repository.count({
-        where: query,
+        where: query.length > 0 ? query : undefined,
       }),
     ]);
 
