@@ -28,16 +28,12 @@ import { Role } from 'src/auth/enums/role-type.enum';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 
+@Auth(AuthType.NONE)
 @Controller('products')
 @ApiTags('Products')
 export class ProductsController {
-  constructor(
-    private readonly productService: ProductService,
-    private readonly categoryService: CategoryService,
-    private readonly tagService: TagService,
-  ) {}
+  constructor(private readonly productService: ProductService) {}
 
-  @Auth(AuthType.NONE)
   @Get('/:id?')
   @ApiOperation({ summary: 'Get all products or get only one product by id' })
   @ApiResponse({
@@ -56,9 +52,31 @@ export class ProductsController {
       ? this.productService.getProductById(id)
       : this.productService.getProducts(limit, page);
   }
+}
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
+@Auth(AuthType.BEARER)
+@Roles(Role.ADMIN)
+@UseGuards(RolesGuard)
+@Controller('admin/products')
+export class AdminProductController {
+  constructor(
+    private readonly productService: ProductService,
+    private readonly categoryService: CategoryService,
+    private readonly tagService: TagService,
+  ) {}
+
+  @Get('/:id?')
+  getProducts(
+    @Param() getProductParamDto: GetByParamDto,
+    @Query() getProductDto: GetProductDto,
+  ) {
+    const { id } = getProductParamDto;
+    const { limit, page, status } = getProductDto;
+    return id
+      ? this.productService.getProductById(id)
+      : this.productService.getProductsByStatus(limit, page, status);
+  }
+
   @Post()
   async createProduct(@Body() createProductDto: CreateProductDto) {
     return this.createOrUpdateProduct(createProductDto, (category, tags) =>
@@ -66,8 +84,6 @@ export class ProductsController {
     );
   }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
   @Patch('/:id')
   async updateProduct(
     @Param() patchProductParamDto: RequireParamDto,
@@ -79,8 +95,6 @@ export class ProductsController {
     );
   }
 
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
   @Delete('/:id')
   deleteProduct(@Param() deleteProductParamDto: RequireParamDto) {
     const { id } = deleteProductParamDto;

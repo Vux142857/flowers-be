@@ -8,6 +8,8 @@ import { Category } from 'src/categories/category.entity';
 import { Tag } from 'src/tags/tag.entity';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { SearchProvider } from 'src/common/search/providers/search.provider';
+import { StatusType } from 'src/common/statusType.enum';
 
 @Injectable()
 export class ProductService {
@@ -16,11 +18,20 @@ export class ProductService {
     private readonly productRepository: Repository<Product>,
 
     private readonly paginationProvider: PaginationProvider,
+
+    private readonly searchProvider: SearchProvider,
   ) {}
 
   async getProducts(limit: number, page: number): Promise<Paginated<Product>> {
     return await this.paginationProvider.paginateQuery<Product>(
       { limit, page },
+      this.productRepository,
+    );
+  }
+
+  async getProductsByStatus(limit: number, page: number, status: StatusType) {
+    return await this.paginationProvider.paginateQuery<Product>(
+      { limit, page, status },
       this.productRepository,
     );
   }
