@@ -57,7 +57,7 @@ export class OrdersController {
 @Roles(Role.ADMIN)
 @UseGuards(RolesGuard)
 @Controller('admin/orders')
-export class OrdersAdminController {
+export class AdminOrdersController {
   constructor(private readonly orderService: OrderService) {}
 
   // Get all orders
