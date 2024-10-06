@@ -19,9 +19,12 @@ export class PaginationProvider {
     repository: Repository<T>,
   ) {
     const entityName = repository.metadata.name;
-    let query: any = paginationQuery.status
-      ? { status: paginationQuery.status }
-      : {};
+
+    let query: any =
+      entityName === 'Order'
+        ? { status: paginationQuery.statusOrder }
+        : { status: paginationQuery.status };
+
     if (entityName === 'User') {
       query = {
         ...query,

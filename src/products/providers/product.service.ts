@@ -50,7 +50,7 @@ export class ProductService {
     return await this.filterProvider.filterAndPaginate<Product>(
       { limit, page, status },
       this.productRepository,
-      [{ category }, { status }],
+      { category, status },
     );
   }
 
