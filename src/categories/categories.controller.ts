@@ -28,6 +28,41 @@ import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
 export class CategoriesController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Get('search')
+  searchCategories(@Query() searchQueryDto: SearchQueryDto) {
+    const { limit, page, query } = searchQueryDto;
+    return this.categoryService.searchCategories(
+      { limit, page },
+      ['name'],
+      query,
+    );
+  }
+
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Get('filter')
+  filterCategories(@Query() filterCategoryDto: GetCategoryDto) {
+    const { limit, page, status } = filterCategoryDto;
+    return this.categoryService.filterCategories(limit, page, { status });
+  }
+
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Get('count')
+  countCategories(@Query() filterQueryDto: GetCategoryDto) {
+    const { status } = filterQueryDto;
+    let query = {};
+    if (status) {
+      query = { ...query, status };
+    }
+    return this.categoryService.countCategories(query);
+  }
+
   @Get('/:id?')
   @Auth(AuthType.NONE)
   @ApiOperation({
@@ -48,20 +83,6 @@ export class CategoriesController {
     return id
       ? this.categoryService.getCategory(id)
       : this.categoryService.getCategories(limit, page);
-  }
-
-  @Get('/:id?')
-  @Auth(AuthType.BEARER)
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @Get('search')
-  searchCategories(@Query() searchQueryDto: SearchQueryDto) {
-    const { limit, page, query } = searchQueryDto;
-    return this.categoryService.searchCategories(
-      { limit, page },
-      ['name'],
-      query,
-    );
   }
 
   @Auth(AuthType.BEARER)

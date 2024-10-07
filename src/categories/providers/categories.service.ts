@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 import { SearchProvider } from 'src/common/search/providers/search.provider';
+import { FilterProvider } from 'src/common/filter/providers/filter.provider';
+import { GetCategoryDto } from '../dtos/get-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -17,6 +19,8 @@ export class CategoryService {
     private readonly paginationProvider: PaginationProvider,
 
     private readonly searchProvider: SearchProvider,
+
+    private readonly filterProvider: FilterProvider,
   ) {}
 
   async getCategories(limit: number, page: number) {
@@ -41,6 +45,23 @@ export class CategoryService {
       fields,
       query,
     );
+  }
+
+  async filterCategories(
+    limit: number,
+    page: number,
+    filterProductDto: GetCategoryDto,
+  ) {
+    const { status } = filterProductDto;
+    return await this.filterProvider.filterAndPaginate<Category>(
+      { limit, page, status },
+      this.categoryRepository,
+      { status },
+    );
+  }
+
+  async countCategories(query: Record<string, string>) {
+    return await this.categoryRepository.count({ where: query });
   }
 
   async createCategory(payload: CreateCategoryDto) {
