@@ -75,6 +75,10 @@ export class ProductService {
     return product;
   }
 
+  async countProducts(query: Record<string, string>) {
+    return await this.productRepository.count({ where: query });
+  }
+
   async createProduct(
     payload: CreateProductDto,
     category: Category,

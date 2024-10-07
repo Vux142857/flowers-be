@@ -73,18 +73,6 @@ export class AdminProductController {
     private readonly tagService: TagService,
   ) {}
 
-  @Get('/:id?')
-  getProducts(
-    @Param() getProductParamDto: GetByParamDto,
-    @Query() getProductDto: GetProductDto,
-  ) {
-    const { id } = getProductParamDto;
-    const { limit, page, status } = getProductDto;
-    return id
-      ? this.productService.getProductById(id)
-      : this.productService.getProductsByStatus(limit, page, status);
-  }
-
   @Get('search')
   searchProducts(@Query() searchQueryDto: SearchQueryDto) {
     const { limit, page, query } = searchQueryDto;
@@ -102,6 +90,32 @@ export class AdminProductController {
       category,
       status,
     });
+  }
+
+  @Get('count')
+  countProducts(@Query() filterQueryDto: FilterProductDto) {
+    const { status, category } = filterQueryDto;
+    let query = {};
+    if (status) {
+      query = { ...query, status };
+    }
+    if (category) {
+      query = { ...query, category };
+    }
+    console.log(query);
+    return this.productService.countProducts(query);
+  }
+
+  @Get('/:id?')
+  getProducts(
+    @Param() getProductParamDto: GetByParamDto,
+    @Query() getProductDto: GetProductDto,
+  ) {
+    const { id } = getProductParamDto;
+    const { limit, page, status } = getProductDto;
+    return id
+      ? this.productService.getProductById(id)
+      : this.productService.getProductsByStatus(limit, page, status);
   }
 
   @Post()
