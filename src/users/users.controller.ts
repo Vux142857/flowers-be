@@ -30,6 +30,7 @@ import { Roles } from 'src/auth/decorator/authorization/role.decorator';
 import { Role } from 'src/auth/enums/role-type.enum';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
 
 @Controller('users')
 @ApiTags('Users')
@@ -44,6 +45,37 @@ export class UsersController {
   public getCustomer(@Query() getUserDto: GetUserDto) {
     const { limit, page, status } = getUserDto;
     return this.userService.getAllCustomers(limit, page, status);
+  }
+
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Get('search')
+  public searchUser(@Query() searchQueryDto: SearchQueryDto) {
+    const { limit, page, query } = searchQueryDto;
+    return this.userService.searchUsers(
+      { limit, page },
+      ['name', 'email'],
+      query,
+    );
+  }
+
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Get('filter')
+  public filterUser(@Query() filterUserDto: GetUserDto) {
+    const { limit, page, status } = filterUserDto;
+    return this.userService.filterUsers(limit, page, { status });
+  }
+
+  @Auth(AuthType.BEARER)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @Get('count')
+  public countUser(@Query() getUserDto: GetUserDto) {
+    const { status } = getUserDto;
+    return this.userService.countUsers({ status });
   }
 
   @ApiOperation({ summary: 'Get all users or get only one user by id' })

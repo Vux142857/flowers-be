@@ -9,7 +9,7 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { PatchUserDto } from '../dtos/patch-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { HashingProvider } from 'src/auth/providers/hashing.provider';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
@@ -19,6 +19,8 @@ import { SearchProvider } from 'src/common/search/providers/search.provider';
 import { Role } from 'src/auth/enums/role-type.enum';
 import { FilterProvider } from 'src/common/filter/providers/filter.provider';
 import { StatusType } from 'src/common/statusType.enum';
+import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
+import { GetUserDto } from '../dtos/get-user.dto';
 
 @Injectable()
 export class UserService {
@@ -56,6 +58,37 @@ export class UserService {
       { limit, page },
       this.userRepository,
       { roles: Role.CUSTOMER, status },
+    );
+  }
+
+  async filterUsers(limit: number, page: number, filterUserDto: GetUserDto) {
+    const { status } = filterUserDto;
+    return await this.filterProvider.filterAndPaginate<User>(
+      { limit, page, status },
+      this.userRepository,
+      { status },
+    );
+  }
+
+  async countUsers(query: Record<string, string>) {
+    return await this.userRepository.count({
+      where: {
+        ...query,
+        roles: Not(Role.ADMIN),
+      },
+    });
+  }
+
+  async searchUsers(
+    paginationQuery: PaginationQueryDto,
+    fields: string[],
+    query: string,
+  ) {
+    return await this.searchProvider.searchAndPaginate<User>(
+      paginationQuery,
+      this.userRepository,
+      fields,
+      query,
     );
   }
 
