@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Order from '../entities/order.entity';
-import { OrderItem } from '../entities/order-items.entity';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 import { CreateOrderProvider } from './create-order.provider';
@@ -12,6 +11,8 @@ import { User } from 'src/users/user.entity';
 import { UpdateStatusOrderDto } from '../dtos/update-status-order.dto';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 import { SearchProvider } from 'src/common/search/providers/search.provider';
+import { GetOrderDto } from '../dtos/get-order.dto';
+import { FilterProvider } from 'src/common/filter/providers/filter.provider';
 
 @Injectable()
 export class OrderService {
@@ -19,14 +20,13 @@ export class OrderService {
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
 
-    @InjectRepository(OrderItem)
-    private readonly orderItemRepository: Repository<OrderItem>,
-
     private readonly paginationProvider: PaginationProvider,
 
     private readonly createOrderProvider: CreateOrderProvider,
 
     private readonly searchProvider: SearchProvider,
+
+    private readonly filterProvider: FilterProvider,
   ) {}
 
   async getOrders(limit: number, page: number): Promise<Paginated<Order>> {
@@ -55,6 +55,19 @@ export class OrderService {
       fields,
       query,
     );
+  }
+
+  async filterOrders(limit: number, page: number, filterOrderDto: GetOrderDto) {
+    const { status } = filterOrderDto;
+    return await this.filterProvider.filterAndPaginate<Order>(
+      { limit, page, status },
+      this.orderRepository,
+      { status },
+    );
+  }
+
+  async countOrders(query: Record<string, string>) {
+    return await this.orderRepository.count({ where: query });
   }
 
   async createOrder(createOrderDto: CreateOrderDto, customer: User) {

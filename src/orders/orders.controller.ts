@@ -54,6 +54,7 @@ export class OrdersController {
   }
 }
 
+// Admin controller
 @Auth(AuthType.BEARER)
 @Roles(Role.ADMIN)
 @UseGuards(RolesGuard)
@@ -61,9 +62,6 @@ export class OrdersController {
 export class AdminOrdersController {
   constructor(private readonly orderService: OrderService) {}
 
-  @Auth(AuthType.BEARER)
-  @Roles(Role.ADMIN)
-  @UseGuards(RolesGuard)
   @Get('search')
   searchOrders(@Query() searchQueryDto: SearchQueryDto) {
     const { limit, page, query } = searchQueryDto;
@@ -72,6 +70,18 @@ export class AdminOrdersController {
       ['order_ID', 'statusOrder'],
       query,
     );
+  }
+
+  @Get('filter')
+  filterOrders(@Query() filterOrderDto: GetOrderDto) {
+    const { limit, page, statusOrder } = filterOrderDto;
+    return this.orderService.filterOrders(limit, page, { statusOrder });
+  }
+
+  @Get('count')
+  countOrders(@Query() filterOrderDto: GetOrderDto) {
+    const { statusOrder } = filterOrderDto;
+    return this.orderService.countOrders({ statusOrder });
   }
 
   @Auth(AuthType.BEARER)

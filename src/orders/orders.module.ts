@@ -11,6 +11,7 @@ import { OrderItemsService } from './providers/order-items.service';
 import { UsersModule } from 'src/users/users.module';
 import { User } from 'src/users/user.entity';
 import { SearchModule } from 'src/common/search/search.module';
+import { FilterModule } from 'src/common/filter/filter.module';
 
 @Module({
   controllers: [OrdersController, AdminOrdersController],
@@ -20,6 +21,7 @@ import { SearchModule } from 'src/common/search/search.module';
     PaginationModule,
     UsersModule,
     SearchModule,
+    FilterModule,
   ],
   providers: [OrderService, CreateOrderProvider, OrderItemsService],
 })
