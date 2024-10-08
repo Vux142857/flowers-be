@@ -76,11 +76,7 @@ export class AdminProductController {
   @Get('search')
   searchProducts(@Query() searchQueryDto: SearchQueryDto) {
     const { limit, page, query } = searchQueryDto;
-    return this.productService.searchProducts(
-      { limit, page },
-      ['name', 'status', 'category'],
-      query,
-    );
+    return this.productService.searchProducts({ limit, page }, ['name'], query);
   }
 
   @Get('filter')
@@ -102,7 +98,6 @@ export class AdminProductController {
     if (category) {
       query = { ...query, category };
     }
-    console.log(query);
     return this.productService.countProducts(query);
   }
 
