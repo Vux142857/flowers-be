@@ -62,6 +62,7 @@ export class SearchProvider {
         : paginationQuery.page + 1;
     const previousPage =
       paginationQuery.page === 1 ? 1 : paginationQuery.page - 1;
+
     const result: Paginated<T> = {
       data: repositories,
       meta: {
@@ -71,10 +72,10 @@ export class SearchProvider {
         totalPages: totalPage,
       },
       links: {
-        first: `${newUrl.origin}${newUrl.pathname}?limit=${paginationQuery.limit}&page=1`,
-        previous: `${newUrl.origin}${newUrl.pathname}?limit=${paginationQuery.limit}&page=${previousPage}`,
-        next: `${newUrl.origin}${newUrl.pathname}?limit=${paginationQuery.limit}&page=${nextPage}`,
-        last: `${newUrl.origin}${newUrl.pathname}?limit=${paginationQuery.limit}&page=${totalPage}`,
+        first: `${newUrl.origin}${newUrl.pathname}?query=${searchTerm}&limit=${paginationQuery.limit}&page=1`,
+        previous: `${newUrl.origin}${newUrl.pathname}?query=${searchTerm}&limit=${paginationQuery.limit}&page=${previousPage}`,
+        next: `${newUrl.origin}${newUrl.pathname}?query=${searchTerm}&limit=${paginationQuery.limit}&page=${nextPage}`,
+        last: `${newUrl.origin}${newUrl.pathname}?query=${searchTerm}&limit=${paginationQuery.limit}&page=${totalPage}`,
       },
     };
 
