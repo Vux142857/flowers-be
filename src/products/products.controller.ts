@@ -29,6 +29,7 @@ import { Auth } from 'src/auth/decorator/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
 import { FilterProductDto } from './dtos/filter-product.dto';
+import { StatusType } from 'src/common/statusType.enum';
 
 @Auth(AuthType.NONE)
 @Controller('products')
@@ -56,9 +57,19 @@ export class ProductsController {
   }
 
   @Get('search')
-  searchProducts(@Query() searchQueryDto: SearchQueryDto) {
+  searchActiveProducts(@Query() searchQueryDto: SearchQueryDto) {
     const { limit, page, query } = searchQueryDto;
-    return this.productService.searchProducts({ limit, page }, ['name'], query);
+    return this.productService.searchProducts(
+      { limit, page, status: StatusType.ACTIVE },
+      ['name'],
+      query,
+    );
+  }
+
+  @Get('filter')
+  filterActiveProducts(@Query() filterQueryDto: FilterProductDto) {
+    const { limit, page, category } = filterQueryDto;
+    return this.productService.filterProducts(limit, page, category);
   }
 }
 
@@ -82,10 +93,7 @@ export class AdminProductController {
   @Get('filter')
   filterProducts(@Query() searchQueryDto: FilterProductDto) {
     const { limit, page, category, status } = searchQueryDto;
-    return this.productService.filterProducts(limit, page, {
-      category,
-      status,
-    });
+    return this.productService.filterProducts(limit, page, category, status);
   }
 
   @Get('count')
@@ -99,18 +107,6 @@ export class AdminProductController {
       query = { ...query, category };
     }
     return this.productService.countProducts(query);
-  }
-
-  @Get('/:id?')
-  getProducts(
-    @Param() getProductParamDto: GetByParamDto,
-    @Query() getProductDto: GetProductDto,
-  ) {
-    const { id } = getProductParamDto;
-    const { limit, page, status } = getProductDto;
-    return id
-      ? this.productService.getProductById(id)
-      : this.productService.getProductsByStatus(limit, page, status);
   }
 
   @Post()

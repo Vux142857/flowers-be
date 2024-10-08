@@ -12,7 +12,6 @@ import { SearchProvider } from 'src/common/search/providers/search.provider';
 import { StatusType } from 'src/common/statusType.enum';
 import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
 import { FilterProvider } from 'src/common/filter/providers/filter.provider';
-import { FilterProductDto } from '../dtos/filter-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -44,9 +43,9 @@ export class ProductService {
   async filterProducts(
     limit: number,
     page: number,
-    filterProductDto: FilterProductDto,
+    category: string,
+    status: StatusType = StatusType.ACTIVE,
   ) {
-    const { category, status } = filterProductDto;
     return await this.filterProvider.filterAndPaginate<Product>(
       { limit, page, status },
       this.productRepository,
