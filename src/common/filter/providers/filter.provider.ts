@@ -23,6 +23,12 @@ export class FilterProvider {
       : {};
 
     query = { ...query, ...filters };
+
+    if (filters.category) {
+      query['category.id'] = filters.category;
+      delete query['category'];
+    }
+
     const [repositories, totalItems] = await Promise.all([
       repository.find({
         where: query,
@@ -45,6 +51,7 @@ export class FilterProvider {
         : paginationQuery.page + 1;
     const previousPage =
       paginationQuery.page === 1 ? 1 : paginationQuery.page - 1;
+
     const result: Paginated<T> = {
       data: repositories,
       meta: {
@@ -54,13 +61,51 @@ export class FilterProvider {
         totalPages: totalPage,
       },
       links: {
-        first: `${newUrl.origin}${newUrl.pathname}?limit=${paginationQuery.limit}&page=1`,
-        previous: `${newUrl.origin}${newUrl.pathname}?limit=${paginationQuery.limit}&page=${previousPage}`,
-        next: `${newUrl.origin}${newUrl.pathname}?limit=${paginationQuery.limit}&page=${nextPage}`,
-        last: `${newUrl.origin}${newUrl.pathname}?limit=${paginationQuery.limit}&page=${totalPage}`,
+        first: this.buildUrlWithQueryParams(
+          filters,
+          newUrl,
+          1,
+          paginationQuery.limit,
+        ),
+        previous: this.buildUrlWithQueryParams(
+          filters,
+          newUrl,
+          previousPage,
+          paginationQuery.limit,
+        ),
+        next: this.buildUrlWithQueryParams(
+          filters,
+          newUrl,
+          nextPage,
+          paginationQuery.limit,
+        ),
+        last: this.buildUrlWithQueryParams(
+          filters,
+          newUrl,
+          totalPage,
+          paginationQuery.limit,
+        ),
       },
     };
 
     return result;
   }
+
+  private buildUrlWithQueryParams = (
+    filtersObj: Record<string, string>,
+    newUrl: URL,
+    page: number,
+    limit: number,
+  ) => {
+    newUrl.searchParams.set('page', page.toString());
+    newUrl.searchParams.set('limit', limit.toString());
+
+    Object.keys(filtersObj).forEach((key) => {
+      if (filtersObj[key]) {
+        newUrl.searchParams.set(key, filtersObj[key]);
+      }
+    });
+
+    return newUrl.href;
+  };
 }
