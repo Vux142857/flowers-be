@@ -75,6 +75,7 @@ export class AdminOrdersController {
   @Get('filter')
   filterOrders(@Query() filterOrderDto: GetOrderDto) {
     const { limit, page, statusOrder } = filterOrderDto;
+    console.log('filterOrderDto', filterOrderDto);
     return this.orderService.filterOrders(limit, page, { statusOrder });
   }
 

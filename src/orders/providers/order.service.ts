@@ -58,11 +58,11 @@ export class OrderService {
   }
 
   async filterOrders(limit: number, page: number, filterOrderDto: GetOrderDto) {
-    const { status } = filterOrderDto;
+    const { statusOrder } = filterOrderDto;
     return await this.filterProvider.filterAndPaginate<Order>(
-      { limit, page, status },
+      { limit, page },
       this.orderRepository,
-      { status },
+      { statusOrder },
     );
   }
 
