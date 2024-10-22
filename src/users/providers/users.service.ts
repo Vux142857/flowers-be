@@ -66,7 +66,7 @@ export class UserService {
     return await this.filterProvider.filterAndPaginate<User>(
       { limit, page, status },
       this.userRepository,
-      { status },
+      { status, roles: Role.CUSTOMER },
     );
   }
 
