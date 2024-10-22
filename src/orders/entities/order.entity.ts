@@ -36,7 +36,7 @@ export default class Order {
   statusOrder: StatusOrder;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
-    cascade: ['insert', 'update', 'remove'],
+    cascade: ['update', 'remove'],
     eager: true,
   })
   orderItems: OrderItem[];

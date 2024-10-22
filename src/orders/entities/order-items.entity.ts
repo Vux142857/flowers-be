@@ -19,12 +19,12 @@ export class OrderItem {
     nullable: false,
     eager: false,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   order: Order;
 
   @ManyToOne(() => Product, (product) => product.orderItems, {
     eager: true,
-    onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
   product: Product;
