@@ -28,6 +28,12 @@ export class Category {
   })
   status: string;
 
+  @Column({ type: 'text', nullable: true })
+  imageUrl: string;
+
+  @Column({ type: 'int', nullable: false, default: 0 })
+  order: number;
+
   @OneToMany(() => Product, (product) => product.category, {
     cascade: ['remove', 'update'],
   })

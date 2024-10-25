@@ -5,6 +5,8 @@ import {
   IsEnum,
   IsNotEmpty,
   IsOptional,
+  IsUrl,
+  IsNumber,
 } from 'class-validator';
 import { StatusType } from 'src/common/statusType.enum';
 
@@ -18,6 +20,15 @@ export class CreateCategoryDto {
   @IsOptional()
   @MaxLength(500)
   description?: string;
+
+  @IsString()
+  @IsOptional()
+  @IsUrl()
+  imageUrl?: string;
+
+  @IsNumber()
+  @IsOptional()
+  order?: number;
 
   @IsEnum(StatusType)
   @IsNotEmpty()

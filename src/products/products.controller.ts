@@ -37,6 +37,22 @@ import { StatusType } from 'src/common/statusType.enum';
 export class ProductsController {
   constructor(private readonly productService: ProductService) {}
 
+  @Get('search')
+  searchActiveProducts(@Query() searchQueryDto: SearchQueryDto) {
+    const { limit, page, query } = searchQueryDto;
+    return this.productService.searchProducts(
+      { limit, page, status: StatusType.ACTIVE },
+      ['name'],
+      query,
+    );
+  }
+
+  @Get('filter')
+  filterActiveProducts(@Query() filterQueryDto: FilterProductDto) {
+    const { limit, page, category } = filterQueryDto;
+    return this.productService.filterProducts(limit, page, category);
+  }
+
   @Get('/:id?')
   @ApiOperation({ summary: 'Get all products or get only one product by id' })
   @ApiResponse({
@@ -54,22 +70,6 @@ export class ProductsController {
     return id
       ? this.productService.getProductById(id)
       : this.productService.getProducts(limit, page);
-  }
-
-  @Get('search')
-  searchActiveProducts(@Query() searchQueryDto: SearchQueryDto) {
-    const { limit, page, query } = searchQueryDto;
-    return this.productService.searchProducts(
-      { limit, page, status: StatusType.ACTIVE },
-      ['name'],
-      query,
-    );
-  }
-
-  @Get('filter')
-  filterActiveProducts(@Query() filterQueryDto: FilterProductDto) {
-    const { limit, page, category } = filterQueryDto;
-    return this.productService.filterProducts(limit, page, category);
   }
 }
 
@@ -91,8 +91,8 @@ export class AdminProductController {
   }
 
   @Get('filter')
-  filterProducts(@Query() searchQueryDto: FilterProductDto) {
-    const { limit, page, category, status } = searchQueryDto;
+  filterProducts(@Query() filterQueryDto: FilterProductDto) {
+    const { limit, page, category, status } = filterQueryDto;
     return this.productService.filterProducts(limit, page, category, status);
   }
 
