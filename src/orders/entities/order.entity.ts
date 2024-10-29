@@ -4,16 +4,13 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/users/user.entity';
-import { Payment } from 'src/payments/payment.entity';
-import { StatusOrder } from '../enum/StatusOrder.enum';
+import { PaymentMethod, StatusOrder } from '../enum/StatusOrder.enum';
 import { OrderItem } from './order-items.entity';
 
 @Entity()
@@ -25,6 +22,29 @@ export default class Order {
   @Index({ fulltext: true })
   @Column({ type: 'varchar', length: 20, nullable: false })
   order_ID: string;
+
+  @Column({ nullable: false })
+  fullName: string;
+
+  @Column({ nullable: false })
+  phone: number;
+
+  address: string;
+
+  @Column()
+  note: string;
+
+  @Column({ nullable: false, default: 0 })
+  shippingCost: number;
+
+  @Column({ nullable: false, default: PaymentMethod.COD })
+  paymentMethod: PaymentMethod;
+
+  @Column({
+    nullable: false,
+    default: false,
+  })
+  isPaid: boolean;
 
   @ManyToOne(() => User, (user) => user.orders)
   customer: User;
@@ -41,9 +61,8 @@ export default class Order {
   })
   orderItems: OrderItem[];
 
-  @OneToOne(() => Payment, (payment) => payment.order)
-  @JoinColumn()
-  payment: Payment;
+  @Column({ nullable: true })
+  paidDate: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

@@ -2,7 +2,6 @@ import { Exclude } from 'class-transformer';
 import { Role } from 'src/auth/enums/role-type.enum';
 import { StatusType } from 'src/common/statusType.enum';
 import Order from 'src/orders/entities/order.entity';
-import { Payment } from 'src/payments/payment.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -70,9 +69,6 @@ export class User {
 
   @OneToMany(() => Order, (order) => order.customer)
   orders: Order[];
-
-  @OneToMany(() => Payment, (payment) => payment.user)
-  payments: Payment[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

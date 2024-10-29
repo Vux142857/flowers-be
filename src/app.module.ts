@@ -18,7 +18,6 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
-import { PaymentsModule } from './payments/payments.module';
 import { SuggestionsModule } from './suggestions/suggestions.module';
 import { OrdersModule } from './orders/orders.module';
 import { TagsModule } from './tags/tags.module';
@@ -85,7 +84,6 @@ const ENV = process.env.NODE_ENV || '';
     }),
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
-    PaymentsModule,
     SuggestionsModule,
     OrdersModule,
     TagsModule,

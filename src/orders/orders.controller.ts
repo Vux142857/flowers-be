@@ -23,6 +23,9 @@ import { PatchOrderDto } from './dtos/patch-order.dto';
 import { RequireParamDto } from 'src/common/require-param';
 import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
+import { createHmac } from 'crypto';
+import { UpdateOrderStatusDto } from './dtos/update-status-order.dto';
+import { StatusOrder } from './enum/StatusOrder.enum';
 
 @Auth(AuthType.BEARER)
 @Roles(Role.CUSTOMER, Role.ADMIN)
@@ -51,6 +54,50 @@ export class OrdersController {
   ) {
     const user = req[REQUEST_USER_KEY];
     return this.orderService.createOrder(createOrderDto, user);
+  }
+
+  @Post('zalopay/create-order')
+  createZaloPayOrder(@Body() order) {
+    return this.orderService.createZaloPayOrder(order);
+  }
+
+  @Post('zalopay/callback')
+  async zaloPayCallback(@Req() req: Request) {
+    const result: any = {};
+    const key2 = process.env.ZALO_KEY2;
+
+    try {
+      const dataStr = (req.body as any).data;
+      const reqMac = (req.body as any).mac;
+
+      const mac = createHmac('sha256', key2).update(dataStr).digest('hex');
+
+      // kiểm tra callback hợp lệ (đến từ ZaloPay server)
+      if (reqMac !== mac) {
+        // callback không hợp lệ
+        result.returncode = -1;
+        result.returnmessage = 'mac not equal';
+      } else {
+        // thanh toán thành công
+        // merchant cập nhật trạng thái cho đơn hàng trong database
+        const dataJson = JSON.parse(dataStr);
+        const orderId = JSON.parse(dataJson['embed_data']).orderId;
+        const orderUpdate = new UpdateOrderStatusDto();
+        orderUpdate.isPaid = true;
+        orderUpdate.paidDate = new Date().toISOString();
+        orderUpdate.statusOrder = StatusOrder.DONE;
+        await this.orderService.updateStatusOrder(orderId, orderUpdate);
+
+        result.returncode = 1;
+        result.returnmessage = 'success';
+      }
+    } catch (ex) {
+      result.returncode = 0; // ZaloPay server sẽ callback lại (tối đa 3 lần)
+      result.returnmessage = ex.message;
+    }
+
+    // thông báo kết quả cho ZaloPay server
+    return result;
   }
 }
 

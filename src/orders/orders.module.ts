@@ -12,6 +12,7 @@ import { UsersModule } from 'src/users/users.module';
 import { User } from 'src/users/user.entity';
 import { SearchModule } from 'src/common/search/search.module';
 import { FilterModule } from 'src/common/filter/filter.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   controllers: [OrdersController, AdminOrdersController],
@@ -22,6 +23,7 @@ import { FilterModule } from 'src/common/filter/filter.module';
     UsersModule,
     SearchModule,
     FilterModule,
+    HttpModule,
   ],
   providers: [OrderService, CreateOrderProvider, OrderItemsService],
 })
