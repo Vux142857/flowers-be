@@ -5,7 +5,7 @@ import Order from '../entities/order.entity';
 import { HttpService } from '@nestjs/axios';
 
 export class ZaloPaymentProvider {
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService) { }
 
   async createZaloPayment(order: Order) {
     const yy = new Date().getFullYear().toString().slice(-2);
@@ -21,7 +21,7 @@ export class ZaloPaymentProvider {
 
     const server_uri =
       process.env.NODE_ENV === 'development'
-        ? 'https://57c4-101-99-32-135.ap.ngrok.io'
+        ? process.env.SERVER_TEST
         : process.env.SERVER;
     // ngrok http --host-header=localhost http://localhost:4000
     const callback_url = `${server_uri}/order/zalopay/callback`;
@@ -62,7 +62,6 @@ export class ZaloPaymentProvider {
 
     const key1 = process.env.ZALO_KEY1;
 
-    // const mac = CryptoJS.HmacSHA256(data, key1).toString();
     const mac = createHmac('sha256', key1).update(data).digest('hex');
     params.mac = mac;
 
@@ -75,7 +74,7 @@ export class ZaloPaymentProvider {
         )
       ).data;
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       throw new InternalServerErrorException('ZaloPay Error');
     }
   }

@@ -72,14 +72,10 @@ export class OrdersController {
 
       const mac = createHmac('sha256', key2).update(dataStr).digest('hex');
 
-      // kiểm tra callback hợp lệ (đến từ ZaloPay server)
       if (reqMac !== mac) {
-        // callback không hợp lệ
         result.returncode = -1;
         result.returnmessage = 'mac not equal';
       } else {
-        // thanh toán thành công
-        // merchant cập nhật trạng thái cho đơn hàng trong database
         const dataJson = JSON.parse(dataStr);
         const orderId = JSON.parse(dataJson['embed_data']).orderId;
         const orderUpdate = new UpdateOrderStatusDto();
@@ -92,11 +88,10 @@ export class OrdersController {
         result.returnmessage = 'success';
       }
     } catch (ex) {
-      result.returncode = 0; // ZaloPay server sẽ callback lại (tối đa 3 lần)
+      result.returncode = 0;
       result.returnmessage = ex.message;
     }
-
-    // thông báo kết quả cho ZaloPay server
+    console.log(result);
     return result;
   }
 }
