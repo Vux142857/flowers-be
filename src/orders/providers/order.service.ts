@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import Order from '../entities/order.entity';
@@ -16,10 +12,8 @@ import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.
 import { SearchProvider } from 'src/common/search/providers/search.provider';
 import { GetOrderDto } from '../dtos/get-order.dto';
 import { FilterProvider } from 'src/common/filter/providers/filter.provider';
-import { firstValueFrom } from 'rxjs';
-import { createHmac } from 'crypto';
-import { HttpService } from '@nestjs/axios';
 import { UpdateOrderStatusDto } from '../dtos/update-status-order.dto';
+import { ZaloPaymentProvider } from './zalo-payment.provider';
 
 @Injectable()
 export class OrderService {
@@ -29,13 +23,13 @@ export class OrderService {
 
     private readonly paginationProvider: PaginationProvider,
 
-    private readonly createOrderProvider: CreateOrderProvider,
-
     private readonly searchProvider: SearchProvider,
 
     private readonly filterProvider: FilterProvider,
 
-    private readonly httpService: HttpService,
+    private readonly createOrderProvider: CreateOrderProvider,
+
+    private readonly creatZaloPaymentProvider: ZaloPaymentProvider,
   ) {}
 
   async getOrders(limit: number, page: number): Promise<Paginated<Order>> {
@@ -111,75 +105,6 @@ export class OrderService {
   }
 
   async createZaloPayOrder(order: Order) {
-    const yy = new Date().getFullYear().toString().slice(-2);
-    const mm = String(new Date(Date.now()).getMonth() + 1).padStart(2, '0');
-    const dd = String(new Date(Date.now()).getUTCDate()).padStart(2, '0');
-
-    const items = order.orderItems.map((item) => ({
-      item_id: item.product.id,
-      item_name: item.product.name,
-      item_price: item.product.price,
-      item_quantity: item.quantity,
-    }));
-
-    const server_uri =
-      process.env.NODE_ENV === 'development'
-        ? 'https://57c4-101-99-32-135.ap.ngrok.io'
-        : process.env.SERVER;
-    // ngrok http --host-header=localhost http://localhost:4000
-    const callback_url = `${server_uri}/order/zalopay/callback`;
-
-    const params = {
-      app_id: process.env.ZALO_APP_ID,
-      app_user: order.fullName,
-      app_trans_id: `${yy}${mm}${dd}_${order.id}_${Date.now()}`,
-      embed_data: JSON.stringify({
-        redirecturl: `${process.env.CLIENT}/order/${order.id}`,
-        orderId: order.id,
-      }),
-      amount: order.total,
-      item: JSON.stringify(items),
-      description: `Thanh toán cho đơn hàng #${order.order_ID}`,
-      app_time: Date.now(),
-      bank_code: 'zalopayapp',
-      phone: order.phone.toString(),
-      address: order.address,
-      mac: '',
-      callback_url,
-    };
-
-    const data =
-      params.app_id +
-      '|' +
-      params.app_trans_id +
-      '|' +
-      params.app_user +
-      '|' +
-      params.amount +
-      '|' +
-      params.app_time +
-      '|' +
-      params.embed_data +
-      '|' +
-      params.item;
-
-    const key1 = process.env.ZALO_KEY1;
-
-    // const mac = CryptoJS.HmacSHA256(data, key1).toString();
-    const mac = createHmac('sha256', key1).update(data).digest('hex');
-    params.mac = mac;
-
-    try {
-      return (
-        await firstValueFrom(
-          this.httpService.post('https://sb-openapi.zalopay.vn/v2/create', {
-            ...params,
-          }),
-        )
-      ).data;
-    } catch (error) {
-      // console.log(error);
-      throw new InternalServerErrorException('ZaloPay Error');
-    }
+    return await this.creatZaloPaymentProvider.createZaloPayment(order);
   }
 }

@@ -13,6 +13,7 @@ import { User } from 'src/users/user.entity';
 import { SearchModule } from 'src/common/search/search.module';
 import { FilterModule } from 'src/common/filter/filter.module';
 import { HttpModule } from '@nestjs/axios';
+import { ZaloPaymentProvider } from './providers/zalo-payment.provider';
 
 @Module({
   controllers: [OrdersController, AdminOrdersController],
@@ -25,6 +26,11 @@ import { HttpModule } from '@nestjs/axios';
     FilterModule,
     HttpModule,
   ],
-  providers: [OrderService, CreateOrderProvider, OrderItemsService],
+  providers: [
+    OrderService,
+    CreateOrderProvider,
+    OrderItemsService,
+    ZaloPaymentProvider,
+  ],
 })
 export class OrdersModule {}
