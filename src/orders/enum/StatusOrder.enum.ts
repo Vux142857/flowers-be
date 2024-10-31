@@ -4,8 +4,3 @@ export enum StatusOrder {
   CANCELED = 'cancelled',
   SHIPPING = 'shipping',
 }
-
-export enum PaymentMethod {
-  COD = 'COD',
-  ZALOPAY = 'ZALOPAY',
-}

@@ -10,8 +10,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/users/user.entity';
-import { PaymentMethod, StatusOrder } from '../enum/StatusOrder.enum';
+import { StatusOrder } from '../enum/StatusOrder.enum';
 import { OrderItem } from './order-items.entity';
+import { PaymentMethod } from '../enum/PaymentMethod.enum';
 
 @Entity()
 export default class Order {
@@ -23,15 +24,16 @@ export default class Order {
   @Column({ type: 'varchar', length: 20, nullable: false })
   order_ID: string;
 
-  @Column({ nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   fullName: string;
 
   @Column({ nullable: false })
-  phone: number;
+  phone: string;
 
+  @Column({ nullable: false })
   address: string;
 
-  @Column()
+  @Column({ nullable: true })
   note: string;
 
   @Column({ nullable: false, default: 0 })

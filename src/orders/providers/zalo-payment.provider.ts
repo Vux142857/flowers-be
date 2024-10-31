@@ -1,80 +1,82 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { createHmac } from 'crypto';
 import { firstValueFrom } from 'rxjs';
 import Order from '../entities/order.entity';
 import { HttpService } from '@nestjs/axios';
 
+@Injectable()
 export class ZaloPaymentProvider {
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService) {}
 
   async createZaloPayment(order: Order) {
     const yy = new Date().getFullYear().toString().slice(-2);
-    const mm = String(new Date(Date.now()).getMonth() + 1).padStart(2, '0');
-    const dd = String(new Date(Date.now()).getUTCDate()).padStart(2, '0');
+    const mm = String(new Date().getMonth() + 1).padStart(2, '0');
+    const dd = String(new Date().getUTCDate()).padStart(2, '0');
 
     const items = order.orderItems.map((item) => ({
-      item_id: item.product.id,
-      item_name: item.product.name,
-      item_price: item.product.price,
-      item_quantity: item.quantity,
+      itemid: item.product.id,
+      itemname: item.product.name,
+      itemprice: item.product.price,
+      itemquantity: item.quantity,
     }));
 
     const server_uri =
       process.env.NODE_ENV === 'development'
         ? process.env.SERVER_TEST
         : process.env.SERVER;
-    // ngrok http --host-header=localhost http://localhost:4000
     const callback_url = `${server_uri}/order/zalopay/callback`;
 
     const params = {
-      app_id: process.env.ZALO_APP_ID,
-      app_user: order.fullName,
-      app_trans_id: `${yy}${mm}${dd}_${order.id}_${Date.now()}`,
-      embed_data: JSON.stringify({
-        redirecturl: `${process.env.CLIENT}/order/${order.id}`,
+      appid: process.env.ZALO_APP_ID,
+      appuser: order.fullName,
+      apptime: Date.now(),
+      apptransid: `${yy}${mm}${dd}_${order.id}_${Date.now()}`,
+      embeddata: JSON.stringify({
+        redirect_url: `${process.env.CLIENT}/order/${order.id}`,
         orderId: order.id,
+        callback_url,
       }),
       amount: order.total,
       item: JSON.stringify(items),
       description: `Thanh toán cho đơn hàng #${order.order_ID}`,
-      app_time: Date.now(),
-      bank_code: 'zalopayapp',
-      phone: order.phone.toString(),
+      bankcode: '',
+      phone: order.phone?.toString(),
       address: order.address,
       mac: '',
-      callback_url,
     };
 
-    const data =
-      params.app_id +
+    const dataString =
+      params.appid +
       '|' +
-      params.app_trans_id +
+      params.apptransid +
       '|' +
-      params.app_user +
+      params.appuser +
       '|' +
       params.amount +
       '|' +
-      params.app_time +
+      params.apptime +
       '|' +
-      params.embed_data +
+      params.embeddata +
       '|' +
       params.item;
 
     const key1 = process.env.ZALO_KEY1;
-
-    const mac = createHmac('sha256', key1).update(data).digest('hex');
+    const mac = createHmac('sha256', key1).update(dataString).digest('hex');
     params.mac = mac;
 
     try {
-      return (
-        await firstValueFrom(
-          this.httpService.post('https://sb-openapi.zalopay.vn/v2/create', {
-            ...params,
-          }),
-        )
-      ).data;
+      const response = await firstValueFrom(
+        this.httpService.post(
+          'https://sandbox.zalopay.com.vn/v001/tpe/createorder',
+          params,
+          {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          },
+        ),
+      );
+      return response?.data;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw new InternalServerErrorException('ZaloPay Error');
     }
   }

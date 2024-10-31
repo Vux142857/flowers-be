@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  ArrayNotEmpty,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -7,9 +8,9 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { PaymentMethod, StatusOrder } from '../enum/StatusOrder.enum';
+import { StatusOrder } from '../enum/StatusOrder.enum';
 import { Product } from 'src/products/product.entity';
-import { User } from 'src/users/user.entity';
+import { PaymentMethod } from '../enum/PaymentMethod.enum';
 
 class OrderItemDto {
   @IsNotEmpty()
@@ -27,20 +28,24 @@ class OrderItemDto {
 
 export class CreateOrderDto {
   @IsString()
+  @IsNotEmpty()
   fullName: string;
 
-  @IsInt()
-  phone: number;
+  @IsString()
+  @IsNotEmpty()
+  phone: string;
 
   @IsString()
+  @IsNotEmpty()
   address: string;
 
   @IsString()
-  note: string;
+  @IsOptional()
+  note?: string;
 
   @IsOptional()
   @IsInt()
-  shippingCost: number;
+  shippingCost?: number = 0;
 
   @IsNotEmpty()
   @IsInt()
@@ -56,10 +61,7 @@ export class CreateOrderDto {
 
   @ValidateNested()
   @IsNotEmpty()
+  @ArrayNotEmpty()
   @Type(() => OrderItemDto)
   orderItems: OrderItemDto[];
-
-  @ValidateNested()
-  @Type(() => User)
-  customer: User;
 }

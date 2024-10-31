@@ -6,6 +6,7 @@ import { ProductService } from 'src/products/providers/product.service';
 import { CreateOrderDto } from '../dtos/create-order.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { User } from 'src/users/user.entity';
+import { StatusOrder } from '../enum/StatusOrder.enum';
 
 export class CreateOrderProvider {
   constructor(
@@ -35,7 +36,12 @@ export class CreateOrderProvider {
         customer,
         total,
         statusOrder: createOrderDto.statusOrder,
+        ...createOrderDto,
       });
+
+      if (!order.isPaid && order.statusOrder === StatusOrder.DONE) {
+        throw new ConflictException('Order must be paid before done');
+      }
 
       const savedOrder = await queryRunner.manager.save(Order, order);
 

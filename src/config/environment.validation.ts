@@ -18,4 +18,11 @@ export default Joi.object({
   // Google Auth
   GOOGLE_CLIENT_ID: Joi.string().required(),
   GOOGLE_CLIENT_SECRET: Joi.string().required(),
+  // Zalo Auth
+  ZALO_APP_ID: Joi.string().required(),
+  ZALO_KEY1: Joi.string().required(),
+  ZALO_KEY2: Joi.string().required(),
+  // Server and client
+  SERVER: Joi.string().required(),
+  CLIENT: Joi.string().required(),
 });

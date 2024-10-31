@@ -57,7 +57,12 @@ export class OrdersController {
   }
 
   @Post('zalopay/create-order')
-  createZaloPayOrder(@Body() order) {
+  async createZaloPayOrder(
+    @Body() createOrderDto: CreateOrderDto,
+    @Req() req: Request,
+  ) {
+    const user = req[REQUEST_USER_KEY];
+    const order = await this.orderService.createOrder(createOrderDto, user);
     return this.orderService.createZaloPayOrder(order);
   }
 
@@ -69,7 +74,6 @@ export class OrdersController {
     try {
       const dataStr = (req.body as any).data;
       const reqMac = (req.body as any).mac;
-
       const mac = createHmac('sha256', key2).update(dataStr).digest('hex');
 
       if (reqMac !== mac) {
@@ -83,7 +87,6 @@ export class OrdersController {
         orderUpdate.paidDate = new Date().toISOString();
         orderUpdate.statusOrder = StatusOrder.DONE;
         await this.orderService.updateStatusOrder(orderId, orderUpdate);
-
         result.returncode = 1;
         result.returnmessage = 'success';
       }
