@@ -23,8 +23,5 @@
       ]
     }
   ],
-  "buildCommand": "npm run build",
-  "compilerOptions": {
-    "outDir": "./dist"
-  }
+  "buildCommand": "npm run build"
 }
