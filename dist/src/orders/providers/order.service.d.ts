@@ -1,0 +1,54 @@
+import { Repository } from 'typeorm';
+import Order from '../entities/order.entity';
+import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
+import { Paginated } from '../../common/pagination/interfaces/paginated.interface';
+import { CreateOrderProvider } from './create-order.provider';
+import { CreateOrderDto } from '../dtos/create-order.dto';
+import { PatchOrderDto } from '../dtos/patch-order.dto';
+import { User } from '../../users/user.entity';
+import { PaginationQueryDto } from '../../common/pagination/dtos/pagination-query.dto';
+import { SearchProvider } from '../../common/search/providers/search.provider';
+import { GetOrderDto } from '../dtos/get-order.dto';
+import { FilterProvider } from '../../common/filter/providers/filter.provider';
+import { UpdateOrderStatusDto } from '../dtos/update-status-order.dto';
+import { ZaloPaymentProvider } from './zalo-payment.provider';
+export declare class OrderService {
+    private readonly orderRepository;
+    private readonly paginationProvider;
+    private readonly searchProvider;
+    private readonly filterProvider;
+    private readonly createOrderProvider;
+    private readonly creatZaloPaymentProvider;
+    constructor(orderRepository: Repository<Order>, paginationProvider: PaginationProvider, searchProvider: SearchProvider, filterProvider: FilterProvider, createOrderProvider: CreateOrderProvider, creatZaloPaymentProvider: ZaloPaymentProvider);
+    getOrders(limit: number, page: number): Promise<Paginated<Order>>;
+    getOrderById(id: string): Promise<Order>;
+    searchOrders(paginationQuery: PaginationQueryDto, fields: string[], query: string): Promise<Paginated<Order>>;
+    filterOrders(limit: number, page: number, filterOrderDto: GetOrderDto): Promise<Paginated<Order>>;
+    countOrders(query: Record<string, string>): Promise<number>;
+    createOrder(createOrderDto: CreateOrderDto, customer: User): Promise<Order>;
+    updateOrder(id: string, payload: PatchOrderDto): Promise<{
+        fullName: string;
+        phone: string;
+        address: string;
+        note: string;
+        shippingCost: number;
+        total: number;
+        paymentMethod: import("../enum/PaymentMethod.enum").PaymentMethod;
+        statusOrder: import("../enum/StatusOrder.enum").StatusOrder;
+        orderItems: {
+            quantity: number;
+            subTotal?: number;
+            product: import("../../products/product.entity").Product;
+        }[];
+        id: string;
+        order_ID: string;
+        isPaid: boolean;
+        customer: User;
+        paidDate: Date;
+        createdAt: Date;
+        updatedAt: Date;
+    } & Order>;
+    updateStatusOrder(id: string, statusOrder: UpdateOrderStatusDto): Promise<import("typeorm").UpdateResult>;
+    deleteOrder(id: string): Promise<Order>;
+    createZaloPayOrder(order: Order): Promise<any>;
+}
