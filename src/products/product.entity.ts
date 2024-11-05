@@ -1,9 +1,9 @@
-import { Category } from 'src/categories/category.entity';
-import { StatusType } from 'src/common/statusType.enum';
-import { Coupon } from 'src/coupons/coupon.entity';
-import { OrderItem } from 'src/orders/entities/order-items.entity';
-import { Suggestion } from 'src/suggestions/suggestion.entity';
-import { Tag } from 'src/tags/tag.entity';
+import { Category } from '../categories/category.entity';
+import { StatusType } from '../common/statusType.enum';
+import { Coupon } from '../coupons/coupon.entity';
+import { OrderItem } from '../orders/entities/order-items.entity';
+import { Suggestion } from '../suggestions/suggestion.entity';
+import { Tag } from '../tags/tag.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

@@ -1,8 +1,8 @@
 import { IsEnum, IsOptional, IsPositive } from 'class-validator';
 
 import { Type } from 'class-transformer';
-import { StatusType } from 'src/common/statusType.enum';
-import { StatusOrder } from 'src/orders/enum/StatusOrder.enum';
+import { StatusType } from '../../../common/statusType.enum';
+import { StatusOrder } from '../../../orders/enum/StatusOrder.enum';
 
 export class PaginationQueryDto {
   @IsOptional()

@@ -12,16 +12,16 @@ import {
 import { GetCategoryDto } from './dtos/get-category.dto';
 import { CreateCategoryDto } from './dtos/create-category.dto';
 import { PatchCategoryDto } from './dtos/patch-category.dto';
-import { GetByParamDto } from 'src/common/get-by-param';
-import { RequireParamDto } from 'src/common/require-param';
+import { GetByParamDto } from '../common/get-by-param';
+import { RequireParamDto } from '../common/require-param';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './providers/categories.service';
-import { Auth } from 'src/auth/decorator/auth.decorator';
-import { AuthType } from 'src/auth/enums/auth-type.enum';
-import { Role } from 'src/auth/enums/role-type.enum';
-import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
-import { Roles } from 'src/auth/decorator/authorization/role.decorator';
-import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
+import { Auth } from '../auth/decorator/auth.decorator';
+import { AuthType } from '../auth/enums/auth-type.enum';
+import { Role } from '../auth/enums/role-type.enum';
+import { RolesGuard } from '../auth/guards/authorization/roles.guard';
+import { Roles } from '../auth/decorator/authorization/role.decorator';
+import { SearchQueryDto } from '../common/search/dtos/search-query.dto';
 
 @Controller('categories')
 @ApiTags('Categories')

@@ -10,19 +10,19 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Auth } from 'src/auth/decorator/auth.decorator';
-import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { Auth } from '../auth/decorator/auth.decorator';
+import { AuthType } from '../auth/enums/auth-type.enum';
 import { GetOrderDto } from './dtos/get-order.dto';
-import { GetByParamDto } from 'src/common/get-by-param';
+import { GetByParamDto } from '../common/get-by-param';
 import { OrderService } from './providers/order.service';
-import { Roles } from 'src/auth/decorator/authorization/role.decorator';
-import { Role } from 'src/auth/enums/role-type.enum';
+import { Roles } from '../auth/decorator/authorization/role.decorator';
+import { Role } from '../auth/enums/role-type.enum';
 import { CreateOrderDto } from './dtos/create-order.dto';
-import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
+import { RolesGuard } from '../auth/guards/authorization/roles.guard';
 import { PatchOrderDto } from './dtos/patch-order.dto';
-import { RequireParamDto } from 'src/common/require-param';
-import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
-import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
+import { RequireParamDto } from '../common/require-param';
+import { REQUEST_USER_KEY } from '../auth/constants/auth.constants';
+import { SearchQueryDto } from '../common/search/dtos/search-query.dto';
 import { createHmac } from 'crypto';
 import { UpdateOrderStatusDto } from './dtos/update-status-order.dto';
 import { StatusOrder } from './enum/StatusOrder.enum';

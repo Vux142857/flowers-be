@@ -8,7 +8,7 @@ import {
   IsUrl,
   IsNumber,
 } from 'class-validator';
-import { StatusType } from 'src/common/statusType.enum';
+import { StatusType } from '../../common/statusType.enum';
 
 export class CreateCategoryDto {
   @IsString()

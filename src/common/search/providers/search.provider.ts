@@ -3,9 +3,9 @@ import { Any, Like, Not, ObjectLiteral, Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { URL } from 'url';
-import { Role } from 'src/auth/enums/role-type.enum';
-import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
-import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { Role } from '../../../auth/enums/role-type.enum';
+import { PaginationQueryDto } from '../../../common/pagination/dtos/pagination-query.dto';
+import { Paginated } from '../../../common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class SearchProvider {

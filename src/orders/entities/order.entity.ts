@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from 'src/users/user.entity';
+import { User } from '../../users/user.entity';
 import { StatusOrder } from '../enum/StatusOrder.enum';
 import { OrderItem } from './order-items.entity';
 import { PaymentMethod } from '../enum/PaymentMethod.enum';

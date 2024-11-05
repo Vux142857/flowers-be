@@ -1,14 +1,14 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UserService } from './providers/users.service';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { PaginationModule } from '../common/pagination/pagination.module';
 import { FindOneByGoogleIdProvider } from './providers/find-one-by-google-id.provider';
 import { CreateGoogleUserProvider } from './providers/create-google-user.provider';
-import { SearchModule } from 'src/common/search/search.module';
-import { FilterModule } from 'src/common/filter/filter.module';
+import { SearchModule } from '../common/search/search.module';
+import { FilterModule } from '../common/filter/filter.module';
 
 @Module({
   controllers: [UsersController],

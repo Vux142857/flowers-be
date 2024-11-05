@@ -9,7 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { StatusOrder } from '../enum/StatusOrder.enum';
-import { Product } from 'src/products/product.entity';
+import { Product } from '../../products/product.entity';
 import { PaymentMethod } from '../enum/PaymentMethod.enum';
 
 class OrderItemDto {

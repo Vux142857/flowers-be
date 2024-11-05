@@ -1,4 +1,4 @@
-import { Product } from 'src/products/product.entity';
+import { Product } from '../../products/product.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Order from './order.entity';
 import { Exclude } from 'class-transformer';

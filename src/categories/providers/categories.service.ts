@@ -4,10 +4,10 @@ import { PatchCategoryDto } from '../dtos/patch-category.dto';
 import { Category } from '../category.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
-import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
-import { SearchProvider } from 'src/common/search/providers/search.provider';
-import { FilterProvider } from 'src/common/filter/providers/filter.provider';
+import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
+import { PaginationQueryDto } from '../../common/pagination/dtos/pagination-query.dto';
+import { SearchProvider } from '../../common/search/providers/search.provider';
+import { FilterProvider } from '../../common/filter/providers/filter.provider';
 import { GetCategoryDto } from '../dtos/get-category.dto';
 
 @Injectable()

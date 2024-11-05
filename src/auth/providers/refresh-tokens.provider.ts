@@ -11,7 +11,7 @@ import { RefreshTokenDto } from '../dtos/refresh-token.dto';
 import { RefreshTokenPayload } from '../interfaces/refresh-token-payload.interface';
 import { GenerateTokensProvider } from './generate-tokens.provider';
 import { ActiveUserPayload } from '../interfaces/active-user-payload.interface';
-import { UserService } from 'src/users/providers/users.service';
+import { UserService } from '../../users/providers/users.service';
 
 export class RefreshTokensProvider {
   constructor(

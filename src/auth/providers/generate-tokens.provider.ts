@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
-import { User } from 'src/users/user.entity';
+import { User } from '../../users/user.entity';
 import { ActiveUserPayload } from '../interfaces/active-user-payload.interface';
 
 @Injectable()

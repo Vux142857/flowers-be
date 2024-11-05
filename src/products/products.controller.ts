@@ -13,23 +13,23 @@ import {
 import { ProductService } from './providers/product.service';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { PatchProductDto } from './dtos/patch-product.dto';
-import { GetByParamDto } from 'src/common/get-by-param';
+import { GetByParamDto } from '../common/get-by-param';
 import { GetProductDto } from './dtos/get-product.dto';
-import { RequireParamDto } from 'src/common/require-param';
+import { RequireParamDto } from '../common/require-param';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CategoryService } from 'src/categories/providers/categories.service';
-import { TagService } from 'src/tags/providers/tag.service';
-import { Category } from 'src/categories/category.entity';
+import { CategoryService } from '../categories/providers/categories.service';
+import { TagService } from '../tags/providers/tag.service';
+import { Category } from '../categories/category.entity';
 import { Product } from './product.entity';
-import { Tag } from 'src/tags/tag.entity';
-import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
-import { Roles } from 'src/auth/decorator/authorization/role.decorator';
-import { Role } from 'src/auth/enums/role-type.enum';
-import { Auth } from 'src/auth/decorator/auth.decorator';
-import { AuthType } from 'src/auth/enums/auth-type.enum';
-import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
+import { Tag } from '../tags/tag.entity';
+import { RolesGuard } from '../auth/guards/authorization/roles.guard';
+import { Roles } from '../auth/decorator/authorization/role.decorator';
+import { Role } from '../auth/enums/role-type.enum';
+import { Auth } from '../auth/decorator/auth.decorator';
+import { AuthType } from '../auth/enums/auth-type.enum';
+import { SearchQueryDto } from '../common/search/dtos/search-query.dto';
 import { FilterProductDto } from './dtos/filter-product.dto';
-import { StatusType } from 'src/common/statusType.enum';
+import { StatusType } from '../common/statusType.enum';
 
 @Auth(AuthType.NONE)
 @Controller('products')

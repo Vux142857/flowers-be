@@ -4,14 +4,14 @@ import { PatchProductDto } from '../dtos/patch-product.dto';
 import { Product } from '../product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Category } from 'src/categories/category.entity';
-import { Tag } from 'src/tags/tag.entity';
-import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
-import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
-import { SearchProvider } from 'src/common/search/providers/search.provider';
-import { StatusType } from 'src/common/statusType.enum';
-import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
-import { FilterProvider } from 'src/common/filter/providers/filter.provider';
+import { Category } from '../../categories/category.entity';
+import { Tag } from '../../tags/tag.entity';
+import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
+import { Paginated } from '../../common/pagination/interfaces/paginated.interface';
+import { SearchProvider } from '../../common/search/providers/search.provider';
+import { StatusType } from '../../common/statusType.enum';
+import { PaginationQueryDto } from '../../common/pagination/dtos/pagination-query.dto';
+import { FilterProvider } from '../../common/filter/providers/filter.provider';
 
 @Injectable()
 export class ProductService {

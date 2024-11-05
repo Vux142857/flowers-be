@@ -1,4 +1,4 @@
-import { StatusType } from 'src/common/statusType.enum';
+import { StatusType } from '../common/statusType.enum';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CouponType } from './enum/CouponType.enum';
-import { Product } from 'src/products/product.entity';
+import { Product } from '../products/product.entity';
 
 @Entity()
 export class Coupon {

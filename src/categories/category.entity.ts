@@ -1,5 +1,5 @@
-import { StatusType } from 'src/common/statusType.enum';
-import { Product } from 'src/products/product.entity';
+import { StatusType } from '../common/statusType.enum';
+import { Product } from '../products/product.entity';
 import {
   Column,
   CreateDateColumn,

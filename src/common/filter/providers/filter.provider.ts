@@ -3,7 +3,7 @@ import { ObjectLiteral, Repository } from 'typeorm';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { URL } from 'url';
-import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { Paginated } from '../../../common/pagination/interfaces/paginated.interface';
 import { FilterQueryDto } from '../dtos/filter.dto';
 
 @Injectable()

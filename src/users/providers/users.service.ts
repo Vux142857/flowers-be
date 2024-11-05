@@ -10,16 +10,16 @@ import { PatchUserDto } from '../dtos/patch-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
 import { Not, Repository } from 'typeorm';
-import { HashingProvider } from 'src/auth/providers/hashing.provider';
-import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { HashingProvider } from '../../auth/providers/hashing.provider';
+import { PaginationProvider } from '../../common/pagination/providers/pagination.provider';
 import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
 import { CreateGoogleUserProvider } from './create-google-user.provider';
 import { GoogleUser } from '../interfaces/google-user.interface';
-import { SearchProvider } from 'src/common/search/providers/search.provider';
-import { Role } from 'src/auth/enums/role-type.enum';
-import { FilterProvider } from 'src/common/filter/providers/filter.provider';
-import { StatusType } from 'src/common/statusType.enum';
-import { PaginationQueryDto } from 'src/common/pagination/dtos/pagination-query.dto';
+import { SearchProvider } from '../../common/search/providers/search.provider';
+import { Role } from '../../auth/enums/role-type.enum';
+import { FilterProvider } from '../../common/filter/providers/filter.provider';
+import { StatusType } from '../../common/statusType.enum';
+import { PaginationQueryDto } from '../../common/pagination/dtos/pagination-query.dto';
 import { GetUserDto } from '../dtos/get-user.dto';
 
 @Injectable()

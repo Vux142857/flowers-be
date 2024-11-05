@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
-import { Role } from 'src/auth/enums/role-type.enum';
-import { StatusType } from 'src/common/statusType.enum';
-import Order from 'src/orders/entities/order.entity';
+import { Role } from '../auth/enums/role-type.enum';
+import { StatusType } from '../common/statusType.enum';
+import Order from '../orders/entities/order.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

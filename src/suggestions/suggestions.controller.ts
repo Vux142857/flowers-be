@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { RequireParamDto } from 'src/common/require-param';
+import { RequireParamDto } from '../common/require-param';
 import { PatchSuggestionDto } from './dtos/patch-suggestions.dto';
-import { GetByParamDto } from 'src/common/get-by-param';
+import { GetByParamDto } from '../common/get-by-param';
 import { CreateSuggestionDto } from './dtos/create-suggestions.dto';
 import { GetSuggestionDto } from './dtos/get-suggestion.dto';
 import { SuggestionService } from './providers/suggestions.service';

@@ -4,16 +4,16 @@ import {
   ProductsController,
 } from './products.controller';
 import { ProductService } from './providers/product.service';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from '../users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './product.entity';
-import { CategoriesModule } from 'src/categories/categories.module';
-import { SuggestionsModule } from 'src/suggestions/suggestions.module';
-import { Category } from 'src/categories/category.entity';
-import { TagsModule } from 'src/tags/tags.module';
-import { PaginationModule } from 'src/common/pagination/pagination.module';
-import { SearchModule } from 'src/common/search/search.module';
-import { FilterModule } from 'src/common/filter/filter.module';
+import { CategoriesModule } from '../categories/categories.module';
+import { SuggestionsModule } from '../suggestions/suggestions.module';
+import { Category } from '../categories/category.entity';
+import { TagsModule } from '../tags/tags.module';
+import { PaginationModule } from '../common/pagination/pagination.module';
+import { SearchModule } from '../common/search/search.module';
+import { FilterModule } from '../common/filter/filter.module';
 
 @Module({
   controllers: [ProductsController, AdminProductController],

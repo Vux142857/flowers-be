@@ -15,9 +15,9 @@ import {
 import { CreateUserDto } from './dtos/create-user.dto';
 import { PatchUserDto } from './dtos/patch-user.dto';
 import { UserService } from './providers/users.service';
-import { GetByParamDto } from 'src/common/get-by-param';
+import { GetByParamDto } from '../common/get-by-param';
 import { GetUserDto } from './dtos/get-user.dto';
-import { RequireParamDto } from 'src/common/require-param';
+import { RequireParamDto } from '../common/require-param';
 import {
   ApiOperation,
   ApiParam,
@@ -25,12 +25,12 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { RolesGuard } from 'src/auth/guards/authorization/roles.guard';
-import { Roles } from 'src/auth/decorator/authorization/role.decorator';
-import { Role } from 'src/auth/enums/role-type.enum';
-import { Auth } from 'src/auth/decorator/auth.decorator';
-import { AuthType } from 'src/auth/enums/auth-type.enum';
-import { SearchQueryDto } from 'src/common/search/dtos/search-query.dto';
+import { RolesGuard } from '../auth/guards/authorization/roles.guard';
+import { Roles } from '../auth/decorator/authorization/role.decorator';
+import { Role } from '../auth/enums/role-type.enum';
+import { Auth } from '../auth/decorator/auth.decorator';
+import { AuthType } from '../auth/enums/auth-type.enum';
+import { SearchQueryDto } from '../common/search/dtos/search-query.dto';
 
 @Controller('users')
 @ApiTags('Users')

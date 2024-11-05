@@ -13,8 +13,8 @@ import {
   IsUrl,
   ValidateNested,
 } from 'class-validator';
-import { StatusType } from 'src/common/statusType.enum';
-import { CreateSuggestionDto } from 'src/suggestions/dtos/create-suggestions.dto';
+import { StatusType } from '../../common/statusType.enum';
+import { CreateSuggestionDto } from '../../suggestions/dtos/create-suggestions.dto';
 
 export class CreateProductDto {
   @IsString()

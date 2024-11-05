@@ -6,11 +6,11 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import jwtConfig from 'src/auth/config/jwt.config';
+import jwtConfig from '../../config/jwt.config';
 import { OAuth2Client } from 'google-auth-library';
 import { GoogleTokenDto } from '../dtos/google-token.dto';
-import { GenerateTokensProvider } from 'src/auth/providers/generate-tokens.provider';
-import { UserService } from 'src/users/providers/users.service';
+import { GenerateTokensProvider } from '../../providers/generate-tokens.provider';
+import { UserService } from '../../../users/providers/users.service';
 
 @Injectable()
 export class GoogleAuthenticationService implements OnModuleInit {

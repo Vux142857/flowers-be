@@ -2,10 +2,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import Order from '../entities/order.entity';
 import { Repository } from 'typeorm';
 import { OrderItem } from '../entities/order-items.entity';
-import { ProductService } from 'src/products/providers/product.service';
+import { ProductService } from '../../products/providers/product.service';
 import { CreateOrderDto } from '../dtos/create-order.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { User } from 'src/users/user.entity';
+import { User } from '../../users/user.entity';
 import { StatusOrder } from '../enum/StatusOrder.enum';
 
 export class CreateOrderProvider {
