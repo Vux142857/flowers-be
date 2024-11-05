@@ -22,5 +22,9 @@
         "TRACE"
       ]
     }
-  ]
+  ],
+  "buildCommand": "npm run build",
+  "compilerOptions": {
+    "outDir": "./dist"
+  }
 }
