@@ -1,73 +1,146 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Flowers E-commerce Backend API
 
-## Description
+This is a RESTful API built with [NestJS](https://nestjs.com/) to support the Flowers E-commerce Platform. It handles core functionalities like product catalog, order management, user authentication, and admin management.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+> **Note**: This backend project is for study purposes and is still under development.
 
-## Installation
+## Project Repositories
 
-```bash
-$ npm install
-```
+- **Backend API Repository**: [https://github.com/Vux142857/flowers-be](https://github.com/Vux142857/flowers-be)
+- **Frontend Repository**: [https://github.com/Vux142857/flowers](https://github.com/Vux142857/flowers)
 
-## Running the app
+## Demo
 
-```bash
-# development
-$ npm run start
+The backend API is deployed at: [https://flowers-be.onrender.com](https://flowers-be.onrender.com)
 
-# watch mode
-$ npm run start:dev
+You can test it with the frontend demo at: [https://flowers-amber-seven.vercel.app](https://flowers-amber-seven.vercel.app)
 
-# production mode
-$ npm run start:prod
-```
+## Getting Started
 
-## Test
+To set up the backend API locally, follow these steps:
 
-```bash
-# unit tests
-$ npm run test
+1. **Clone the repository**:
 
-# e2e tests
-$ npm run test:e2e
+   ```bash
+   git clone https://github.com/Vux142857/flowers-be
+   cd flowers-be
+   ```
 
-# test coverage
-$ npm run test:cov
-```
+2. **Install dependencies**:
 
-## Support
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+3. **Set up environment variables**:
 
-## Stay in touch
+   Create a `.env` file in the root directory and configure the following:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+   ```env
+   # Server and Client URLs
+   SERVER=http://localhost:3000
+   CLIENT=http://localhost:3001
 
-## License
+   # Database Configuration
+   DATABASE_HOST=
+   DATABASE_PORT=5432
+   DATABASE_NAME=
+   DATABASE_USERNAME=
+   DATABASE_PASSWORD=
+   DATABASE_SYNC=true
+   DATABASE_AUTOLOAD_ENTITIES=true
 
-Nest is [MIT licensed](LICENSE).
+   # Test Configuration
+   SERVER_TEST=
+
+   # JWT Configuration
+   JWT_SECRET=
+   JWT_TOKEN_AUDIENCE=
+   JWT_TOKEN_ISSUER=
+   JWT_ACCESS_TOKEN_TTL=7200
+   JWT_REFRESH_TOKEN_TTL=86400
+
+   # Google Auth
+   GOOGLE_CLIENT_ID=
+   GOOGLE_CLIENT_SECRET=
+
+   # Zalo Payment Configuration
+   ZALO_APP_ID=554
+   ZALO_KEY1=8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn
+   ZALO_KEY2=uUfsWgfLkRLzq6W2uNXTCxrfxs51auny
+   ```
+
+   Fill in the required values such as `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_USERNAME`, and `DATABASE_PASSWORD`.
+
+4. **Run the database migration** (if necessary):
+
+   ```bash
+   npm run migration:run
+   # or
+   yarn migration:run
+   ```
+
+5. **Run the development server**:
+
+   ```bash
+   npm run start:dev
+   # or
+   yarn start:dev
+   ```
+
+6. **Access the API documentation**:
+
+   If enabled, the API documentation is accessible at [http://localhost:3000/api](http://localhost:3000/api).
+
+> **Note**: Ensure that your database server is running locally or accessible via network if testing locally.
+
+## Project Structure
+
+- **src/modules/**: Contains modules for each feature, such as `products`, `orders`, `users`, etc.
+- **src/controllers/**: Handles routing and HTTP request logic.
+- **src/services/**: Contains business logic and interacts with the database.
+- **src/entities/**: Defines database models used with TypeORM.
+
+## Key Features
+
+- **Products**: Manage products, categories, and inventory.
+- **Orders**: Create and manage orders and order items.
+- **Users**: User authentication, registration, and roles (admin, customer).
+- **Admin**: Restricted routes for managing products, orders, and analytics.
+- **Paymentgate**: Use Zalopay api for payment gate.
+
+## Learn More
+
+To learn more about NestJS and TypeORM, explore these resources:
+
+- [NestJS Documentation](https://docs.nestjs.com) - Official documentation for NestJS.
+- [TypeORM Documentation](https://typeorm.io) - Comprehensive guide for using TypeORM.
+
+## Deploying the Project
+
+The project can be deployed to any cloud platform that supports Node.js. For example:
+
+1. **Create a production build**:
+
+   ```bash
+   npm run build
+   # or
+   yarn build
+   ```
+
+2. **Run the production server**:
+
+   ```bash
+   npm run start:prod
+   # or
+   yarn start:prod
+   ```
+
+3. **Configure environment variables** on your cloud platform.
+
+---
