@@ -70,7 +70,9 @@ const ENV = process.env.NODE_ENV || '';
           database: configService.get('database.database'),
           synchronize: configService.get('database.synchronize'),
           autoLoadEntities: configService.get('database.autoLoadEntities'),
-
+          ssl: {
+            rejectUnauthorized: false,
+          },
           JWT_SECRET: configService.get('jwt.secret'),
           JWT_AUDIENCE: configService.get('jwt.audience'),
           JWT_ISSUER: configService.get('jwt.issuer'),
